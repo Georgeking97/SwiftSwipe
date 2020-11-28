@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "251064357936",
+    "firebase_url": "https://swiftwipe-c666c.firebaseio.com",
+    "project_id": "swiftwipe-c666c",
+    "storage_bucket": "swiftwipe-c666c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251064357936:android:a967cb264b6e5a5fcec9f5",
+        "android_client_info": {
+          "package_name": "com.example.swiftwipe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "251064357936-vb9nbu3v4j29q8dfupr5ecp06n5rskog.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBADHePM0c_i4HHDn7Q8zlWdvBMDHDeBPw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "251064357936-vb9nbu3v4j29q8dfupr5ecp06n5rskog.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
