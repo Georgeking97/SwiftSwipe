@@ -37,9 +37,8 @@ public class Register extends AppCompatActivity {
         mPhone = findViewById(R.id.phoneNumber);
         mRegisterBtn = findViewById(R.id.registerBtn);
         mLoginBtn = findViewById(R.id.createText);
-
-        fAuth = FirebaseAuth.getInstance();
         progressBar = findViewById(R.id.progressBar);
+        fAuth = FirebaseAuth.getInstance();
 
         //current user object shows us if a user is logged in or not, if the object isn't null it means they're logged in, launches main activity
         if (fAuth.getCurrentUser() != null){
