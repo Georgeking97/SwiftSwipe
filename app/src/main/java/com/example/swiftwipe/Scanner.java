@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.zxing.Result;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -30,7 +31,6 @@ public class Scanner extends AppCompatActivity {
         setContentView(R.layout.activity_scanner);
         scannerView = findViewById(R.id.scannerView);
         codeScanner = new CodeScanner(this, scannerView);
-        resultData = findViewById(R.id.resultsOfScanner);
         //decoding scanned qr code
         codeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
@@ -75,6 +75,11 @@ public class Scanner extends AppCompatActivity {
                 token.continuePermissionRequest();
             }
         }).check();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
 

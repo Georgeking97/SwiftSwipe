@@ -19,17 +19,25 @@ public class MainActivity extends AppCompatActivity {
 
         ScannerBtn = findViewById(R.id.scannerBtn);
     }
-
+    //logging out and starting the login activity
     public void logout(View view) {
-        //logging out and starting the login activity
         FirebaseAuth.getInstance().signOut();
         MainActivity.this.finish();
         startActivity(new Intent(MainActivity.this, Login.class));
     }
-
+    //starting up the search function
+    public void search(View view){
+        MainActivity.this.finish();
+        startActivity(new Intent(MainActivity.this, Search.class));
+    }
+    //Starting the barcode scanner
     public void scan(View view) {
         MainActivity.this.finish();
         startActivity(new Intent(getApplicationContext(), Scanner.class));
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }
