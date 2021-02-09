@@ -2,41 +2,50 @@ package com.example.swiftwipe;
 
 public class Information {
 
-    private String productname;
-    private String productsize;
-    private int productprice;
+    public String productName;
+    public int productPrice;
+    public String productSize;
+    public String productImage;
+
+    public Information(String productName, int productPrice, String productSize, String productImage) {
+        this.productName = productName;
+        this.productPrice = productPrice;
+        this.productSize = productSize;
+        this.productImage = productImage;
+    }
 
     public Information() {
-
     }
 
-    public Information(String productname, String productsize, int productprice){
-        this.productname = productname;
-        this.productsize = productsize;
-        this.productprice = productprice;
+    public String getProductName() {
+        return productName;
     }
 
-    public int getProductprice() {
-        return productprice;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
-    public void setProductprice(int productprice) {
-        this.productprice = productprice;
+    public int getProductPrice() {
+        return productPrice;
     }
 
-    public String getProductsize() {
-        return productsize;
+    public void setProductPrice(int productPrice) {
+        this.productPrice = productPrice;
     }
 
-    public void setProductsize(String productsize) {
-        this.productsize = productsize;
+    public String getProductSize() {
+        return productSize;
     }
 
-    public String getProductname() {
-        return productname;
+    public void setProductSize(String productSize) {
+        this.productSize = productSize;
     }
 
-    public void setProductname(String productname) {
-        this.productname = productname;
+    public String getProductImage() {
+        return productImage;
+    }
+
+    public void setProductImage(String productImage) {
+        this.productImage = productImage;
     }
 }
