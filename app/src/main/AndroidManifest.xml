@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Swiftwipe">
-        <activity android:name=".Cart"></activity>
+        <activity android:name=".product"></activity>
+        <activity android:name=".Cart" />
         <activity android:name=".Search" />
         <activity android:name=".Scanner" />
         <activity android:name=".Login">
@@ -30,7 +31,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".product"/>
     </application>
 
 </manifest>

@@ -29,7 +29,7 @@
         app:layout_constraintTop_toBottomOf="@+id/productImage" />
 
     <TextView
-        android:id="@+id/productSize"
+        android:id="@+id/productSizeTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -43,14 +43,14 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/productPrice"
+        android:id="@+id/productPriceTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/productSize" />
+        app:layout_constraintTop_toBottomOf="@+id/productSizeTxt" />
 
     <Button
         android:id="@+id/addBtn"
@@ -60,5 +60,5 @@
         android:text="Button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/productPrice" />
+        app:layout_constraintTop_toBottomOf="@+id/productPriceTxt" />
 </androidx.constraintlayout.widget.ConstraintLayout>

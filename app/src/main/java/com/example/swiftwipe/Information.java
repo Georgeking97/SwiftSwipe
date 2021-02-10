@@ -6,12 +6,16 @@ public class Information {
     public int productPrice;
     public String productSize;
     public String productImage;
+    public String productid;
 
-    public Information(String productName, int productPrice, String productSize, String productImage) {
+
+
+    public Information(String productName, int productPrice, String productSize, String productImage, String productid) {
         this.productName = productName;
         this.productPrice = productPrice;
         this.productSize = productSize;
         this.productImage = productImage;
+        this.productid = productid;
     }
 
     public Information() {
@@ -47,5 +51,13 @@ public class Information {
 
     public void setProductImage(String productImage) {
         this.productImage = productImage;
+    }
+
+    public String getProductid() {
+        return productid;
+    }
+
+    public void setProductid(String productid) {
+        this.productid = productid;
     }
 }

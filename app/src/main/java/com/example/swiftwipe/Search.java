@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,9 +42,13 @@ public class Search extends AppCompatActivity {
             @Override
             public void onItemClick(int position, View v) {
                 Intent i = new Intent(getApplicationContext(), product.class);
+                TextView idView = v.findViewById(R.id.id);
+                String positionStr = idView.getText().toString();
+                i.putExtra("EXTRA_SESSION_ID", positionStr);
                 startActivity(i);
             }
         });
+
     }
 
     @Override

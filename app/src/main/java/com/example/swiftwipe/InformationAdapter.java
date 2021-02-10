@@ -31,6 +31,7 @@ public class InformationAdapter extends FirebaseRecyclerAdapter<Information, Inf
         holder.name.setText(model.getProductName());
         holder.size.setText(model.getProductSize());
         holder.price.setText(model.getProductPrice()+"");
+        holder.id.setText(model.getProductid());
         Glide.with(holder.image.getContext()).load(model.getProductImage()).into(holder.image);
     }
 
@@ -43,7 +44,7 @@ public class InformationAdapter extends FirebaseRecyclerAdapter<Information, Inf
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView name, size, price;
+        TextView name, size, price, id;
         ImageView image;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -53,6 +54,7 @@ public class InformationAdapter extends FirebaseRecyclerAdapter<Information, Inf
             size = itemView.findViewById(R.id.ProductSize);
             price = itemView.findViewById(R.id.ProductPrice);
             image = itemView.findViewById(R.id.imageView);
+            id = itemView.findViewById(R.id.id);
         }
 
         @Override
