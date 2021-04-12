@@ -1,6 +1,7 @@
 package com.example.swiftwipe;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -38,7 +39,11 @@ public class Scanner extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Intent i = new Intent(getApplicationContext(), product.class);
                         resultData.setText(result.getText());
+                        String positionStr = resultData.getText().toString();
+                        i.putExtra("EXTRA_SESSION_ID", positionStr);
+                        startActivity(i);
                     }
                 });
             }

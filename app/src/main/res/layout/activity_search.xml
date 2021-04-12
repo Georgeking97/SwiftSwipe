@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#949ca4"
     tools:context=".Search">
 
     <LinearLayout
@@ -18,15 +20,61 @@
             android:layout_marginTop="20dp"
             android:layout_marginRight="10dp"
             android:paddingBottom="10dp">
-            <SearchView
-                android:id="@+id/search"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/result_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_marginBottom="75dp" />
     </LinearLayout>
-</LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="700dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/homeBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".25"
+            android:onClick="home"
+            android:src="@drawable/ic_home_name"></ImageButton>
+
+        <ImageButton
+            android:id="@+id/searchBtn"
+            android:layout_width="0dp"
+            android:layout_weight=".25"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/homeBtn"
+            android:onClick="search"
+            android:src="@drawable/ic_baseline_search_24"></ImageButton>
+
+        <ImageButton
+            android:id="@+id/barcodeBtn"
+            android:layout_width="0dp"
+            android:layout_weight=".25"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/searchBtn"
+            android:onClick="scan"
+            android:src="@drawable/ic_code_scanner_auto_focus_off"></ImageButton>
+
+        <ImageButton
+            android:id="@+id/cartBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/barcodeBtn"
+            android:layout_weight=".25"
+            android:onClick="cart"
+            android:src="@drawable/ic_action_name"></ImageButton>
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

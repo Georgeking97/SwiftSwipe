@@ -8,16 +8,14 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
-    Button ScannerBtn;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        ScannerBtn = findViewById(R.id.scannerBtn);
     }
 
     //logging out and starting the login activity
@@ -38,9 +36,15 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.this.finish();
         startActivity(new Intent(getApplicationContext(), Scanner.class));
     }
+    //starting the cart activity
+    public void cart(View view) {
+        MainActivity.this.finish();
+        startActivity(new Intent(getApplicationContext(), Cart.class));
+    }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
     }
+
 }

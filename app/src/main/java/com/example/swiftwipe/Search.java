@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -48,7 +49,6 @@ public class Search extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
     }
 
     @Override
@@ -84,11 +84,37 @@ public class Search extends AppCompatActivity {
         });
         return super.onCreateOptionsMenu(menu);
     }
-    //creates a query of the firebase database and returns all relevant results and sets it to the recyclerview
+
     private void search(String query) {
+        //searches the database by product name
         FirebaseRecyclerOptions<Information> options = new FirebaseRecyclerOptions.Builder<Information>().setQuery(FirebaseDatabase.getInstance().getReference().child("Test").orderByChild("productName").startAt(query).endAt(query+" \uf8ff"), Information.class).build();
+        //sets up the adapter with the result of the query
         adapter = new InformationAdapter(options);
         adapter.startListening();
+        //sets the recyclerview
         recyclerView.setAdapter(adapter);
+    }
+
+    //starting up the home activity
+    public void home(View view) {
+        Search.this.finish();
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+    }
+
+    //starting up the search function
+    public void search(View view) {
+        Search.this.finish();
+        startActivity(new Intent(getApplicationContext(), Search.class));
+    }
+
+    //Starting the barcode scanner
+    public void scan(View view) {
+        Search.this.finish();
+        startActivity(new Intent(getApplicationContext(), Scanner.class));
+    }
+    //starting the cart activity
+    public void cart(View view) {
+        Search.this.finish();
+        startActivity(new Intent(getApplicationContext(), Cart.class));
     }
 }
