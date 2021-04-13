@@ -42,7 +42,7 @@ public class product extends AppCompatActivity {
         id2 = (TextView) findViewById(R.id.id2);
 
         //calling the method that sets the values in the xml view
-        //addValueEventListener();
+        addValueEventListener();
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -7,27 +7,26 @@
     android:background="#949ca4"
     tools:context=".Search">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <EditText
+        android:id="@+id/searchBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Search..."
+        android:textColorHint="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <RelativeLayout
-            android:id="@+id/topbar"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="10dp"
-            android:paddingBottom="10dp">
-        </RelativeLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/result_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="75dp" />
-    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/result_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchBar" />
+
 
     <LinearLayout
         android:id="@+id/relativeLayout"
@@ -51,18 +50,18 @@
         <ImageButton
             android:id="@+id/searchBtn"
             android:layout_width="0dp"
-            android:layout_weight=".25"
             android:layout_height="match_parent"
             android:layout_toRightOf="@+id/homeBtn"
+            android:layout_weight=".25"
             android:onClick="search"
             android:src="@drawable/ic_baseline_search_24"></ImageButton>
 
         <ImageButton
             android:id="@+id/barcodeBtn"
             android:layout_width="0dp"
-            android:layout_weight=".25"
             android:layout_height="match_parent"
             android:layout_toRightOf="@+id/searchBtn"
+            android:layout_weight=".25"
             android:onClick="scan"
             android:src="@drawable/ic_code_scanner_auto_focus_off"></ImageButton>
 

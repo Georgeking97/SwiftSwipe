@@ -1,7 +1,6 @@
 package com.example.swiftwipe;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -52,7 +51,7 @@ public class checkout extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
-        //creating context so that I can start a new intent from my static method
+        // creating context so that I can start a new intent from my static method
         mContext = this;
         // getting the total cost of the cart passed over from the cart activity
         String cost = getIntent().getStringExtra("EXTRA_SESSION_ID");
@@ -121,6 +120,8 @@ public class checkout extends AppCompatActivity {
             PaymentIntent.Status status = paymentIntent.getStatus();
             if (status == PaymentIntent.Status.Succeeded) {
                 // payment successfully completed
+                //Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                Toast.makeText(activity, "Order completed!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(mContext, MainActivity.class);
                 mContext.startActivity(intent);
             } else if (status == PaymentIntent.Status.RequiresPaymentMethod) {

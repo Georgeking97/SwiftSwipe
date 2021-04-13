@@ -2,9 +2,11 @@ package com.example.swiftwipe;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -13,31 +15,58 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class Search extends AppCompatActivity {
+    private static final String TAG = "Search";
     DatabaseReference dbref;
     RecyclerView recyclerView;
     InformationAdapter adapter;
     SearchView search;
+    EditText searchInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-
-        dbref = FirebaseDatabase.getInstance().getReference("Test");
+        // getting values to work with
         recyclerView = findViewById(R.id.result_list);
         search = findViewById(R.id.search);
-
+        searchInput = findViewById(R.id.searchBar);
+        // providing path to firebase branch I want to query
+        dbref = FirebaseDatabase.getInstance().getReference("Test");
+        // recyclerview stuff
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-
+        // db query to populate the recyclerview
         FirebaseRecyclerOptions<Information> options = new FirebaseRecyclerOptions.Builder<Information>().setQuery(dbref, Information.class).build();
         adapter = new InformationAdapter(options);
         recyclerView.setAdapter(adapter);
+
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.d(TAG, "Search box has changed to: " + s.toString());
+                if (s.toString().isEmpty()){
+                    FirebaseRecyclerOptions<Information> options = new FirebaseRecyclerOptions.Builder<Information>().setQuery(dbref, Information.class).build();
+                    adapter.updateOptions(options);
+                } else {
+                    FirebaseRecyclerOptions<Information> options = new FirebaseRecyclerOptions.Builder<Information>().setQuery(dbref.orderByChild("productName").equalTo(s.toString().toLowerCase()), Information.class).build();
+                    adapter.updateOptions(options);
+                }
+            }
+        });
 
         adapter.setOnItemClickListener(new InformationAdapter.ClickListener() {
             @Override
@@ -63,38 +92,6 @@ public class Search extends AppCompatActivity {
         adapter.stopListening();
     }
 
-    //takes the users input for the search
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.searchmenu, menu);
-        MenuItem item = menu.findItem(R.id.search);
-        SearchView searchView=(SearchView)item.getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                search(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                search(newText);
-                return false;
-            }
-        });
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    private void search(String query) {
-        //searches the database by product name
-        FirebaseRecyclerOptions<Information> options = new FirebaseRecyclerOptions.Builder<Information>().setQuery(FirebaseDatabase.getInstance().getReference().child("Test").orderByChild("productName").startAt(query).endAt(query+" \uf8ff"), Information.class).build();
-        //sets up the adapter with the result of the query
-        adapter = new InformationAdapter(options);
-        adapter.startListening();
-        //sets the recyclerview
-        recyclerView.setAdapter(adapter);
-    }
-
     //starting up the home activity
     public void home(View view) {
         Search.this.finish();
@@ -112,6 +109,7 @@ public class Search extends AppCompatActivity {
         Search.this.finish();
         startActivity(new Intent(getApplicationContext(), Scanner.class));
     }
+
     //starting the cart activity
     public void cart(View view) {
         Search.this.finish();

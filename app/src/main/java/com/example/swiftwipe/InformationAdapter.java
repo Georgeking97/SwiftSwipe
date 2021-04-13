@@ -1,5 +1,6 @@
 package com.example.swiftwipe;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +14,14 @@ import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
+import org.bouncycastle.asn1.dvcs.Data;
+
+import java.util.ArrayList;
+
 public class InformationAdapter extends FirebaseRecyclerAdapter<Information, InformationAdapter.MyViewHolder> {
     private static ClickListener clickListener;
-    /**
-     * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
-     * {@link FirebaseRecyclerOptions} for configuration options.
-     *
-     * @param options
-     */
+
+
     public InformationAdapter(@NonNull FirebaseRecyclerOptions<Information> options) {
         super(options);
     }
@@ -61,6 +62,8 @@ public class InformationAdapter extends FirebaseRecyclerAdapter<Information, Inf
             clickListener.onItemClick(getAdapterPosition(), v);
         }
     }
+
+
 
     public void setOnItemClickListener(ClickListener clickListener) {
         InformationAdapter.clickListener = clickListener;
