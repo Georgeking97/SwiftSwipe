@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,47 +21,42 @@ import com.google.firebase.database.ValueEventListener;
 
 public class product extends AppCompatActivity {
     Information newInformation;
-    TextView name, price, size, id2;
+    TextView name, price, size, id;
     ImageView image;
     Button button;
-    DatabaseReference dbref;
+    DatabaseReference dbref, userdbref;
+    FirebaseAuth fAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
-        // getting the id from the search activity
-        String productId = getIntent().getStringExtra("EXTRA_SESSION_ID");
-        // setting up the path to the product on the firebase database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        dbref = database.getReference("Test").child(productId);
 
         name = (TextView) findViewById(R.id.productName);
         price = (TextView) findViewById(R.id.productPriceTxt);
         size = (TextView) findViewById(R.id.productSizeTxt);
         image = (ImageView) findViewById(R.id.productImage);
         button = (Button) findViewById(R.id.addBtn);
-        id2 = (TextView) findViewById(R.id.id2);
+        id = (TextView) findViewById(R.id.id);
 
-        //calling the method that sets the values in the xml view
-        addValueEventListener();
+        // getting the id from the search activity, required to allow me to populate the xml view
+        String productId = getIntent().getStringExtra("EXTRA_SESSION_ID");
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // getting the product id to send to the cart class, why do I do this?
-                TextView textview1 = (TextView) findViewById(R.id.id2);
-                String text = textview1.getText().toString();
-                //switching over to the cart activity
-                Intent intent = new Intent(getApplicationContext(), Cart.class);
-                intent.putExtra("EXTRA_SESSION_ID", text);
-                startActivity(intent);
-            }
-        });
+        // setting up the path to the product on the firebase database, getting the data for the xml view
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        dbref = database.getReference("Test").child(productId);
+
+        // setting up the path to the cart branch to push the object value to
+        fAuth = FirebaseAuth.getInstance();
+        String authUid = fAuth.getUid();
+        userdbref = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("cart");
+
+        setValues();
+        addItemToCart();
     }
 
     // setting the values in the xml view based on the product ID passed in from search
-    private void addValueEventListener() {
+    private void setValues() {
         dbref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -67,11 +64,35 @@ public class product extends AppCompatActivity {
                 name.setText(newInformation.getProductName());
                 price.setText(newInformation.getProductPrice()+"");
                 size.setText(newInformation.getProductSize());
-                id2.setText(newInformation.getProductid());
+                id.setText(newInformation.getProductid());
                 Glide.with(image.getContext()).load(newInformation.getProductImage()).into(image);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    // adding the product retrieved from the product branch to the cart branch
+    private void addItemToCart(){
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dbref.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        newInformation = snapshot.getValue(Information.class);
+                        userdbref.push().setValue(newInformation);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
+
+                //switching over to the cart activity
+                Intent intent = new Intent(getApplicationContext(), Cart.class);
+                startActivity(intent);
             }
         });
     }

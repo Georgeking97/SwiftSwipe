@@ -11,6 +11,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -45,7 +53,10 @@ public class checkout extends AppCompatActivity {
     private String paymentIntentClientSecret;
     private Stripe stripe;
     TextView total;
+    Information newInformation;
     double finalCost;
+    FirebaseAuth fAuth;
+    DatabaseReference dbref, userdbref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +64,7 @@ public class checkout extends AppCompatActivity {
         setContentView(R.layout.activity_checkout);
         // creating context so that I can start a new intent from my static method
         mContext = this;
+        //
         // getting the total cost of the cart passed over from the cart activity
         String cost = getIntent().getStringExtra("EXTRA_SESSION_ID");
         // setting the amount the user will be paying when they click pay
@@ -104,7 +116,7 @@ public class checkout extends AppCompatActivity {
         // Handle the result of stripe.confirmPayment
         stripe.onPaymentResult(requestCode, data, new PaymentResultCallback(this));
     }
-    private static final class PaymentResultCallback
+    private final class PaymentResultCallback
             implements ApiResultCallback<PaymentIntentResult> {
         @NonNull private final WeakReference<checkout> activityRef;
         PaymentResultCallback(@NonNull checkout activity) {
@@ -120,10 +132,20 @@ public class checkout extends AppCompatActivity {
             PaymentIntent.Status status = paymentIntent.getStatus();
             if (status == PaymentIntent.Status.Succeeded) {
                 // payment successfully completed
-                //Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                // Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+
+                // setting up the branch I want to push to
+                fAuth = FirebaseAuth.getInstance();
+                String authUid = fAuth.getUid();
+                dbref = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("order");
+                //dbref.push()
+
+
                 Toast.makeText(activity, "Order completed!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(mContext, MainActivity.class);
                 mContext.startActivity(intent);
+                //
             } else if (status == PaymentIntent.Status.RequiresPaymentMethod) {
                 // Payment failed – allow retrying using a different payment method
                 activity.displayAlert(

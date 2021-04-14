@@ -23,17 +23,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class Cart extends AppCompatActivity {
-    DatabaseReference dbref;
     DatabaseReference userdbref;
     RecyclerView recyclerView;
     FirebaseAuth fAuth;
     CartAdapter adapter;
-    Information newInformation;
-
     TextView total;
     Button checkout, applyCouponBtn;
     EditText coupon;
-
     int finalvalue = 0;
 
     @Override
@@ -47,32 +43,26 @@ public class Cart extends AppCompatActivity {
         coupon = findViewById(R.id.couponValue);
         total = findViewById(R.id.totalAmountTxt);
 
-        //gets the id of the product passed in from the product class, this is used to get the entire object from firebase (getting the entire object is done in the addValueEventListener class)
-        String productId = getIntent().getStringExtra("EXTRA_SESSION_ID");
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        //if statement to ensure that if the cart activity is opened from a path that doesn't provide an ID that the application doesn't crash
-        if (productId != null) {
-            //returns the item we added from the product class
-            dbref = database.getReference("Test").child(productId);
-            //pushing the product to the users individual branch
-            addValueEventListener();
-        }
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
-        //gets the unique token associated with the signed in account from firebase auth
+        // gets the unique token associated with the signed in account from firebase auth
         fAuth = FirebaseAuth.getInstance();
         String authUid = fAuth.getUid();
-        //points to the users branch on the database based upon their unique token
-        userdbref = FirebaseDatabase.getInstance().getReference("Test2").child(authUid);
-        //queries the users branch for all products and populates the recyclerview with them
+        // points to the users branch on the database based upon their unique token
+        userdbref = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("cart");
+        // queries the users branch for all products and populates the recyclerview with them
         FirebaseRecyclerOptions<Information> options = new FirebaseRecyclerOptions.Builder<Information>().setQuery(userdbref, Information.class).build();
-        //passes the results over to the cart adapter to populate the single view items (cartlist.xml)
+        // passes the results over to the cart adapter to populate the single view items (cartlist.xml)
         adapter = new CartAdapter(options);
         recyclerView.setAdapter(adapter);
 
-        //getting the total cost of the entire cart
+        totalCost();
+        applyCoupon();
+        openCheckout();
+    }
+
+    private void totalCost(){
         userdbref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -91,7 +81,9 @@ public class Cart extends AppCompatActivity {
 
             }
         });
-        // currently trying to apply the coupon discount
+    }
+
+    private void applyCoupon(){
         applyCouponBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,7 +115,9 @@ public class Cart extends AppCompatActivity {
                 }
             }
         });
+    }
 
+    private void openCheckout(){
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,24 +125,6 @@ public class Cart extends AppCompatActivity {
                 String pass = finalvalue + "";
                 intent.putExtra("EXTRA_SESSION_ID", pass);
                 startActivity(intent);
-            }
-        });
-    }
-
-    private void addValueEventListener() {
-        //takes a snapshot of the object in the database so that we can use it's attributes to fill out the recyclerview
-        dbref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //gets the attributes from the snapshot (name, size, price etc..)
-                newInformation = snapshot.getValue(Information.class);
-                //pushes the object to the users individual branch so that their cart isn't lost when going to a different activity or adding a new item
-                userdbref.push().setValue(newInformation);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
