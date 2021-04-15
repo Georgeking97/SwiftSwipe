@@ -81,8 +81,13 @@ public class product extends AppCompatActivity {
                 dbref.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        fAuth = FirebaseAuth.getInstance();
+                        String authUid = fAuth.getUid();
                         newInformation = snapshot.getValue(Information.class);
-                        userdbref.push().setValue(newInformation);
+                        String key = userdbref.push().getKey();
+                        newInformation.setProductid(key);
+                        userdbref = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("cart").child(key);
+                        userdbref.setValue(newInformation);
                     }
 
                     @Override

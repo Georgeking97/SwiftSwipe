@@ -1,6 +1,5 @@
 package com.example.swiftwipe;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,13 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.stripe.android.ApiResultCallback;
 import com.stripe.android.PaymentIntentResult;
@@ -48,7 +43,6 @@ import okhttp3.Response;
 public class checkout extends AppCompatActivity {
     // 10.0.2.2 is the Android emulator's alias to localhost
     private static final String BACKEND_URL = "https://stripe-payment-swiftswipe.herokuapp.com/";
-    private static Context mContext;
     private OkHttpClient httpClient = new OkHttpClient();
     private String paymentIntentClientSecret;
     private Stripe stripe;
@@ -62,9 +56,6 @@ public class checkout extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
-        // creating context so that I can start a new intent from my static method
-        mContext = this;
-        //
         // getting the total cost of the cart passed over from the cart activity
         String cost = getIntent().getStringExtra("EXTRA_SESSION_ID");
         // setting the amount the user will be paying when they click pay
@@ -131,21 +122,19 @@ public class checkout extends AppCompatActivity {
             PaymentIntent paymentIntent = result.getIntent();
             PaymentIntent.Status status = paymentIntent.getStatus();
             if (status == PaymentIntent.Status.Succeeded) {
-                // payment successfully completed
-                // Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-
                 // setting up the branch I want to push to
                 fAuth = FirebaseAuth.getInstance();
                 String authUid = fAuth.getUid();
-                dbref = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("order");
-                //dbref.push()
+                dbref = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("cart");
+                FirebaseRecyclerOptions<Information> options = new FirebaseRecyclerOptions.Builder<Information>().setQuery(dbref, Information.class).build();
+                System.out.println(options);
+                dbref.push().setValue(options);
+
+
 
 
                 Toast.makeText(activity, "Order completed!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(mContext, MainActivity.class);
-                mContext.startActivity(intent);
-                //
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             } else if (status == PaymentIntent.Status.RequiresPaymentMethod) {
                 // Payment failed – allow retrying using a different payment method
                 activity.displayAlert(

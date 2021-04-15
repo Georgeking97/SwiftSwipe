@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 
@@ -31,10 +32,9 @@ public class CartAdapter extends FirebaseRecyclerAdapter<Information, CartAdapte
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull Information model) {
+    protected void onBindViewHolder(@NonNull MyViewHolder holder, final int position, @NonNull Information model) {
         fAuth = FirebaseAuth.getInstance();
         String authUid = fAuth.getUid();
-
         holder.name.setText(model.getProductName());
         holder.size.setText(model.getProductSize());
         holder.price.setText(model.getProductPrice() + "");
@@ -43,18 +43,11 @@ public class CartAdapter extends FirebaseRecyclerAdapter<Information, CartAdapte
         holder.deleteBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                System.out.println(model.getProductid());
                 FirebaseDatabase.getInstance().getReference("User")
                         .child(authUid)
                         .child("cart")
-                        .child(getRef(position).getKey())
-                        .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-
-                    }
-                });
-
+                        .child(model.getProductid())
+                        .removeValue();
             }
         });
     }
