@@ -1,5 +1,6 @@
 package com.example.swiftwipe;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class Cart extends AppCompatActivity {
@@ -30,7 +33,8 @@ public class Cart extends AppCompatActivity {
     TextView total;
     Button checkout, applyCouponBtn;
     EditText coupon;
-    int finalvalue = 0;
+    boolean used;
+    double finalvalue = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,16 +53,19 @@ public class Cart extends AppCompatActivity {
         // gets the unique token associated with the signed in account from firebase auth
         fAuth = FirebaseAuth.getInstance();
         String authUid = fAuth.getUid();
+
         // points to the users branch on the database based upon their unique token
         userdbref = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("cart");
+
         // queries the users branch for all products and populates the recyclerview with them
         FirebaseRecyclerOptions<Information> options = new FirebaseRecyclerOptions.Builder<Information>().setQuery(userdbref, Information.class).build();
+
         // passes the results over to the cart adapter to populate the single view items (cartlist.xml)
         adapter = new CartAdapter(options);
         recyclerView.setAdapter(adapter);
 
-        totalCost();
         applyCoupon();
+        totalCost();
         openCheckout();
     }
 
@@ -83,26 +90,57 @@ public class Cart extends AppCompatActivity {
         });
     }
 
-    private void applyCoupon(){
+    private void applyCoupon(){// gets the unique token associated with the signed in account from firebase auth
+        fAuth = FirebaseAuth.getInstance();
+        String authUid = fAuth.getUid();
+        Context context = getApplicationContext();
+        DatabaseReference db2 = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("coupon");
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("Coupon").child("Coupons");
+
+        db2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                used = (Boolean) snapshot.getValue();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
         applyCouponBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // getting the coupon code the user entered
                 String input = coupon.getText().toString().trim();
+                double percentage;
                 // error handling if no coupon has been entered and they click the button
                 if (TextUtils.isEmpty(input)) {
-                    coupon.setError("text is Required");
+                    coupon.setError("Please enter a coupon");
                     return;
                 } else {
-                    //query the databases coupon tree
-                    DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Coupon");
-                    db.addValueEventListener(new ValueEventListener() {
+                    db.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            for (DataSnapshot snapshot5 : snapshot.getChildren()){
-                                System.out.println("value: "+snapshot5.getValue());
-                                if(input.equals(snapshot5.getValue())){
-                                    System.out.println("hey");
+                            for (DataSnapshot ds : snapshot.getChildren()){
+                                Coupon coupon = ds.getValue(Coupon.class);
+                                if (coupon.getCode().equals(input)&& used == false){
+                                    // dividing the total basket cost by 100 and multiplying it by the discount of the code to get the amount to take away
+                                    double percentage = finalvalue/100 * coupon.getValue();
+                                    // taking the amount away from the total cost and updating the view
+                                    finalvalue = finalvalue - percentage;
+                                    // letting the user know the coupon was successfully applied
+                                    Toast.makeText(context, "Coupon applied!", Toast.LENGTH_SHORT).show();
+                                    total.setText(finalvalue+"");
+                                    // if a coupon is used we set the used coupon branch to true to only allow one coupon used per cart
+                                    db2.setValue(true);
+                                    break;
+                                } else {
+                                    //Toast.makeText(context, "Coupon doesn't exist!", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }

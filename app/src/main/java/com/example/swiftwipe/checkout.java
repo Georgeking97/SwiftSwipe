@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -51,9 +50,8 @@ public class checkout extends AppCompatActivity {
     private OkHttpClient httpClient = new OkHttpClient();
     private String paymentIntentClientSecret;
     private Stripe stripe;
-    TextView total;
-    Information newInformation;
     double finalCost;
+    TextView total;
     FirebaseAuth fAuth;
     DatabaseReference toPath, fromPath;
 
@@ -66,7 +64,7 @@ public class checkout extends AppCompatActivity {
         // setting the amount the user will be paying when they click pay
         total = findViewById(R.id.amount_id);
         total.setText(cost);
-        finalCost = Integer.parseInt(cost);
+        finalCost = Double.parseDouble(cost);
 
         stripe = new Stripe(
                 getApplicationContext(),
@@ -168,7 +166,8 @@ public class checkout extends AppCompatActivity {
                 }
                 // emptying the cart after the order has been successful
                 fromPath.removeValue();
-
+                DatabaseReference db3 = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("coupon");
+                db3.setValue(false);
                 Toast.makeText(activity, "Order completed!", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
             } else if (status == PaymentIntent.Status.RequiresPaymentMethod) {
