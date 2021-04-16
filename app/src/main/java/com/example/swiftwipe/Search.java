@@ -23,7 +23,6 @@ public class Search extends AppCompatActivity {
     DatabaseReference dbref;
     RecyclerView recyclerView;
     InformationAdapter adapter;
-    SearchView search;
     EditText searchInput;
 
     @Override
@@ -32,7 +31,6 @@ public class Search extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         // getting values to work with
         recyclerView = findViewById(R.id.result_list);
-        search = findViewById(R.id.search);
         searchInput = findViewById(R.id.searchBar);
         // providing path to firebase branch I want to query
         dbref = FirebaseDatabase.getInstance().getReference("Test");

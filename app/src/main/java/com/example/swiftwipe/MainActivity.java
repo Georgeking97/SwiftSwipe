@@ -25,6 +25,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, Login.class));
     }
 
+    //starting up the home activity
+    public void home(View view) {
+        MainActivity.this.finish();
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+    }
+
     //starting up the search function
     public void search(View view) {
         MainActivity.this.finish();

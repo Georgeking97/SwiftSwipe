@@ -48,7 +48,7 @@
     <LinearLayout
         android:id="@+id/relativeLayout"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginTop="700dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -61,18 +61,19 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight=".25"
+            android:onClick="home"
             android:backgroundTint="#272928"
-            android:src="@drawable/ic_home_name"></ImageButton>
+            android:src="@drawable/ic_home"></ImageButton>
 
         <ImageButton
             android:id="@+id/searchBtn"
             android:layout_width="0dp"
-            android:layout_weight=".25"
-            android:backgroundTint="#272928"
             android:layout_height="match_parent"
             android:layout_toRightOf="@+id/homeBtn"
+            android:layout_weight=".25"
+            android:backgroundTint="#272928"
             android:onClick="search"
-            android:src="@drawable/ic_baseline_search_24"></ImageButton>
+            android:src="@drawable/ic_magnifying_glass_2935435"></ImageButton>
 
         <ImageButton
             android:id="@+id/barcodeBtn"
@@ -82,17 +83,18 @@
             android:layout_height="match_parent"
             android:layout_toRightOf="@+id/searchBtn"
             android:onClick="scan"
-            android:src="@drawable/ic_code_scanner_auto_focus_off"></ImageButton>
+            android:src="@drawable/ic_instagram_3814055"></ImageButton>
 
         <ImageButton
             android:id="@+id/cartBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_toRightOf="@+id/barcodeBtn"
-            android:backgroundTint="#272928"
+
             android:layout_weight=".25"
+            android:backgroundTint="#272928"
             android:onClick="cart"
-            android:src="@drawable/ic_action_name"></ImageButton>
+            ></ImageButton>
 
 
     </LinearLayout>

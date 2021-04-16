@@ -13,8 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.stripe.android.ApiResultCallback;
@@ -27,7 +30,9 @@ import com.stripe.android.view.CardInputWidget;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +55,7 @@ public class checkout extends AppCompatActivity {
     Information newInformation;
     double finalCost;
     FirebaseAuth fAuth;
-    DatabaseReference dbref, userdbref;
+    DatabaseReference toPath, fromPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,16 +127,47 @@ public class checkout extends AppCompatActivity {
             PaymentIntent paymentIntent = result.getIntent();
             PaymentIntent.Status status = paymentIntent.getStatus();
             if (status == PaymentIntent.Status.Succeeded) {
-                // setting up the branch I want to push to
+                // getting the date and time the order was made
+                String myCurrentDateTime = DateFormat.getDateTimeInstance()
+                        .format(Calendar.getInstance().getTime());
+                // getting the employees unique log in number
                 fAuth = FirebaseAuth.getInstance();
                 String authUid = fAuth.getUid();
-                dbref = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("cart");
-                FirebaseRecyclerOptions<Information> options = new FirebaseRecyclerOptions.Builder<Information>().setQuery(dbref, Information.class).build();
-                System.out.println(options);
-                dbref.push().setValue(options);
+                // getting the path to where the objects in the cart are stored
+                fromPath = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("cart");
+                // setting the path to where I want the objects in cart to go to on firebase
+                toPath = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("order").child(myCurrentDateTime);
+                // for each object in the cart (cart branch) push to the order branch
+                fromPath.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        toPath.setValue(snapshot.getValue(), new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                                if (error != null) {
+                                    System.out.println("failed");
+                                }
+                                else {
+                                    System.out.println("success");
+                                }
+                            }
+                        });
+                    }
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-
+                    }
+                });
+                // if this sleep isn't done the cart branch will get deleted before the objects
+                // can be moved over to the order branch
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                // emptying the cart after the order has been successful
+                fromPath.removeValue();
 
                 Toast.makeText(activity, "Order completed!", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));

@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +36,7 @@ public class CartAdapter extends FirebaseRecyclerAdapter<Information, CartAdapte
     protected void onBindViewHolder(@NonNull MyViewHolder holder, final int position, @NonNull Information model) {
         fAuth = FirebaseAuth.getInstance();
         String authUid = fAuth.getUid();
+
         holder.name.setText(model.getProductName());
         holder.size.setText(model.getProductSize());
         holder.price.setText(model.getProductPrice() + "");
@@ -62,7 +64,7 @@ public class CartAdapter extends FirebaseRecyclerAdapter<Information, CartAdapte
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView name, size, price, id;
         ImageView image;
-        Button deleteBtn;
+        ImageButton deleteBtn;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
