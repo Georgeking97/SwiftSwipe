@@ -2,13 +2,11 @@ package com.example.swiftwipe;
 
 public class Information {
 
-    public String productName;
+    private String productName;
     public int productPrice;
-    public String productSize;
-    public String productImage;
-    public String productid;
-
-
+    private String productSize;
+    private String productImage;
+    private String productid;
 
     public Information(String productName, int productPrice, String productSize, String productImage, String productid) {
         this.productName = productName;

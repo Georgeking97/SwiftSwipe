@@ -72,6 +72,7 @@ public class Search extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), product.class);
                 TextView idView = v.findViewById(R.id.id);
                 String positionStr = idView.getText().toString();
+                System.out.println("Position String: "+positionStr);
                 i.putExtra("EXTRA_SESSION_ID", positionStr);
                 startActivity(i);
             }

@@ -89,14 +89,14 @@ public class Cart extends AppCompatActivity {
             }
         });
     }
-
-    private void applyCoupon(){// gets the unique token associated with the signed in account from firebase auth
+    // gets the unique token associated with the signed in account from firebase auth
+    private void applyCoupon(){
         fAuth = FirebaseAuth.getInstance();
         String authUid = fAuth.getUid();
         Context context = getApplicationContext();
         DatabaseReference db2 = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("coupon");
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("Coupon").child("Coupons");
-
+        // checking to see if the user has already applied a coupon, if they haven't the value should be false
         db2.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -109,8 +109,6 @@ public class Cart extends AppCompatActivity {
 
             }
         });
-
-
 
         applyCouponBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +126,7 @@ public class Cart extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             for (DataSnapshot ds : snapshot.getChildren()){
                                 Coupon coupon = ds.getValue(Coupon.class);
+                                //if the users entered value matches a coupon on the database and the employee hasn't already used a coupon
                                 if (coupon.getCode().equals(input)&& used == false){
                                     // dividing the total basket cost by 100 and multiplying it by the discount of the code to get the amount to take away
                                     double percentage = finalvalue/100 * coupon.getValue();

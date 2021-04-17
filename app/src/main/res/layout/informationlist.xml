@@ -4,21 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#949ca4"
-    app:cardCornerRadius="4dp">
+    android:backgroundTint="#272928"
+    app:cardCornerRadius="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:background="#949ca4"
         android:layout_height="match_parent"
-        android:layout_margin="4dp"
+        android:layout_margin="1dp"
+        android:background="#949ca4"
         app:layout_constraintEnd_toEndOf="@+id/ProductPrice"
         app:layout_constraintStart_toEndOf="@+id/ProductPrice">
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="4dp"
             android:padding="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,46 +30,46 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="112dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
             android:layout_toEndOf="@+id/imageView"
             android:text="Product Name"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="@+id/imageView"
-            app:layout_constraintStart_toStartOf="@+id/imageView"
-            app:layout_constraintTop_toTopOf="@+id/imageView" />
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="@+id/id" />
 
         <TextView
             android:id="@+id/ProductSize"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/ProductName"
-            android:layout_marginStart="224dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:layout_toEndOf="@+id/imageView"
             android:text="Product Size"
-            android:textSize="15sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/ProductPrice"
-            app:layout_constraintStart_toStartOf="@+id/imageView" />
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/ProductName" />
 
         <TextView
             android:id="@+id/ProductPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/ProductSize"
-            android:layout_marginStart="112dp"
-            android:layout_marginTop="52dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:layout_toEndOf="@+id/imageView"
             android:text="Product Price"
-            android:textSize="15sp"
-            app:layout_constraintStart_toStartOf="@+id/imageView"
-            app:layout_constraintTop_toTopOf="@+id/imageView" />
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/ProductSize" />
 
         <TextView
             android:id="@+id/id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginEnd="91dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView"

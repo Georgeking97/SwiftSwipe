@@ -39,6 +39,11 @@ public class Login extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar2);
         fAuth = FirebaseAuth.getInstance();
 
+        loggingIn();
+        goToRegister();
+    }
+
+    public void loggingIn(){
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,7 +84,9 @@ public class Login extends AppCompatActivity {
                 });
             }
         });
+    }
 
+    public void goToRegister(){
         mCreateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
