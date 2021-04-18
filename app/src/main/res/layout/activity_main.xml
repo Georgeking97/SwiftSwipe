@@ -11,11 +11,12 @@
         android:id="@+id/logoutBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="196dp"
-        android:onClick="logout"
+        android:layout_marginTop="148dp"
         android:backgroundTint="#272928"
+        android:onClick="logout"
         android:text="Logout"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,12 +25,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:backgroundTint="#272928"
         android:onClick="scan"
         android:text="Scanner"
-        android:backgroundTint="#272928"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/logoutBtn"
+        app:layout_constraintStart_toStartOf="@+id/logoutBtn"
         app:layout_constraintTop_toBottomOf="@+id/logoutBtn" />
 
     <Button
@@ -37,13 +37,49 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:backgroundTint="#272928"
         android:onClick="search"
         android:text="Search"
-        android:backgroundTint="#272928"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/scannerBtn"
-        app:layout_constraintTop_toBottomOf="@+id/scannerBtn"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="@+id/scannerBtn"
+        app:layout_constraintTop_toBottomOf="@+id/scannerBtn" />
+
+    <Button
+        android:id="@+id/orderBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#272928"
+        android:onClick="order"
+        android:text="Orders"
+        app:layout_constraintEnd_toEndOf="@+id/SearchBtn"
+        app:layout_constraintStart_toStartOf="@+id/SearchBtn"
+        app:layout_constraintTop_toBottomOf="@+id/SearchBtn" />
+
+    <Button
+        android:id="@+id/cartButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#272928"
+        android:text="Cart"
+        android:onClick="cart"
+        app:layout_constraintEnd_toEndOf="@+id/orderBtn"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/orderBtn"
+        app:layout_constraintTop_toBottomOf="@+id/orderBtn" />
+
+    <Button
+        android:id="@+id/returnBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#272928"
+        android:text="Returns"
+        android:onClick="returnOrder"
+        app:layout_constraintEnd_toEndOf="@+id/cartButton"
+        app:layout_constraintStart_toStartOf="@+id/cartButton"
+        app:layout_constraintTop_toBottomOf="@+id/cartButton" />
 
     <LinearLayout
         android:id="@+id/relativeLayout"
@@ -90,7 +126,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_toRightOf="@+id/barcodeBtn"
-
             android:layout_weight=".25"
             android:backgroundTint="#272928"
             android:onClick="cart"
@@ -98,5 +133,4 @@
 
 
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

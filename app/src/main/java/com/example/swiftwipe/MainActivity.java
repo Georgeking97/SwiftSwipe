@@ -48,6 +48,16 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), Cart.class));
     }
 
+    public void order(View view) {
+        MainActivity.this.finish();
+        startActivity(new Intent(getApplicationContext(), order.class));
+    }
+
+    public void returnOrder(View view) {
+        MainActivity.this.finish();
+        startActivity(new Intent(getApplicationContext(), orderReturn.class));
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

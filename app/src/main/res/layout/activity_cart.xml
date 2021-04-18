@@ -26,7 +26,7 @@
         android:id="@+id/cartInfo"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,22 +37,21 @@
             android:id="@+id/textView6"
             android:layout_width="62dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="8dp"
             android:text="Total:"
-            app:layout_constraintBottom_toTopOf="@+id/couponValue"
-            app:layout_constraintEnd_toStartOf="@+id/totalAmountTxt"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/couponValue" />
+            app:layout_constraintStart_toStartOf="@+id/couponValue"
+            app:layout_constraintTop_toBottomOf="@+id/couponValue" />
 
         <TextView
             android:id="@+id/totalAmountTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:text="TextView"
             app:layout_constraintBottom_toBottomOf="@+id/textView6"
-            app:layout_constraintTop_toTopOf="@+id/textView6"
-            tools:layout_editor_absoluteX="94dp" />
+            app:layout_constraintStart_toEndOf="@+id/textView6"
+            app:layout_constraintTop_toTopOf="@+id/textView6" />
 
         <Button
             android:id="@+id/payBtn"
@@ -82,9 +81,11 @@
             android:id="@+id/couponValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
             android:hint="Enter Coupon"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="35dp" />
+            app:layout_constraintStart_toStartOf="@+id/cartInfo"
+            app:layout_constraintTop_toTopOf="@+id/cartInfo" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
