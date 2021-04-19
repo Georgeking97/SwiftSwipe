@@ -10,16 +10,19 @@ import android.widget.EditText;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class Search extends AppCompatActivity {
-    private static final String TAG = "Search";
     DatabaseReference dbref;
     RecyclerView recyclerView;
     InformationAdapter adapter;
@@ -29,18 +32,33 @@ public class Search extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        // getting values to work with
+
         recyclerView = findViewById(R.id.result_list);
         searchInput = findViewById(R.id.searchBar);
+
         // providing path to firebase branch I want to query
         dbref = FirebaseDatabase.getInstance().getReference("Test");
-        // recyclerview stuff
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
+
         // db query to populate the recyclerview
         FirebaseRecyclerOptions<Information> options = new FirebaseRecyclerOptions.Builder<Information>().setQuery(dbref, Information.class).build();
         adapter = new InformationAdapter(options);
         recyclerView.setAdapter(adapter);
+
+        dbref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds: snapshot.getChildren()){
+                    System.out.println(ds.getKey());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -55,7 +73,6 @@ public class Search extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                Log.d(TAG, "Search box has changed to: " + s.toString());
                 if (s.toString().isEmpty()){
                     FirebaseRecyclerOptions<Information> options = new FirebaseRecyclerOptions.Builder<Information>().setQuery(dbref, Information.class).build();
                     adapter.updateOptions(options);

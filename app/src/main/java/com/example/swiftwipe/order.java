@@ -2,15 +2,13 @@ package com.example.swiftwipe;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,6 +26,7 @@ public class order extends AppCompatActivity {
     private orderAdapter adapter;
     private ArrayList<orderModel> list;
     private orderAdapter.clickListener listener;
+    private String key;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +35,7 @@ public class order extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
 
         list = new ArrayList<>();
         setOnClick();
@@ -47,6 +46,10 @@ public class order extends AppCompatActivity {
         String authUid = fAuth.getUid();
         userdbref = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("order");
         // this allows me to populate my recyclerview with the date the order was made
+        gettingParentKeyValue();
+    }
+
+    private void gettingParentKeyValue(){
         userdbref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -54,7 +57,8 @@ public class order extends AppCompatActivity {
                     // setting up my order object
                     orderModel model = ds.getValue(orderModel.class);
                     // remapping the only variable to the parent key
-                    String key =  ds.getKey();
+                    key =  ds.getKey();
+
                     model.setKey(key);
                     // increasing the array size for the adapter
                     list.add(model);
@@ -75,7 +79,10 @@ public class order extends AppCompatActivity {
         listener = new orderAdapter.clickListener() {
             @Override
             public void onClick(View v, int position) {
+                String result = list.get(position).getKey();
+                System.out.println(result);
                 Intent intent = new Intent(getApplicationContext(), orderView.class);
+                intent.putExtra("branch", result);
                 startActivity(intent);
             }
         };

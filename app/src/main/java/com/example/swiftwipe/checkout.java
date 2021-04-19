@@ -32,6 +32,7 @@ import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +52,7 @@ public class checkout extends AppCompatActivity {
     private String paymentIntentClientSecret;
     private Stripe stripe;
     double finalCost;
+    String cost;
     TextView total;
     FirebaseAuth fAuth;
     DatabaseReference toPath, fromPath;
@@ -60,7 +62,7 @@ public class checkout extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
         // getting the total cost of the cart passed over from the cart activity
-        String cost = getIntent().getStringExtra("EXTRA_SESSION_ID");
+        cost = getIntent().getStringExtra("EXTRA_SESSION_ID");
         // setting the amount the user will be paying when they click pay
         total = findViewById(R.id.amount_id);
         total.setText(cost);
@@ -139,17 +141,7 @@ public class checkout extends AppCompatActivity {
                 fromPath.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        toPath.setValue(snapshot.getValue(), new DatabaseReference.CompletionListener() {
-                            @Override
-                            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                                if (error != null) {
-                                    System.out.println("failed");
-                                }
-                                else {
-                                    System.out.println("success");
-                                }
-                            }
-                        });
+                        toPath.setValue(snapshot.getValue());
                     }
 
                     @Override
@@ -166,6 +158,10 @@ public class checkout extends AppCompatActivity {
                 }
                 // emptying the cart after the order has been successful
                 fromPath.removeValue();
+                orderObject obj = new orderObject();
+                obj.setCost(cost);
+                toPath.child("order info").setValue(obj);
+
                 DatabaseReference db3 = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("coupon");
                 db3.setValue(false);
                 Toast.makeText(activity, "Order completed!", Toast.LENGTH_SHORT).show();

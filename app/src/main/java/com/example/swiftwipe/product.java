@@ -40,7 +40,6 @@ public class product extends AppCompatActivity {
 
         // getting the id from the search activity, required to allow me to populate the xml view
         String productId = getIntent().getStringExtra("EXTRA_SESSION_ID");
-        System.out.println("product ID: "+productId);
 
         // setting up the path to the product on the firebase database, getting the data for the xml view
         FirebaseDatabase database = FirebaseDatabase.getInstance();
