@@ -18,6 +18,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.stripe.android.ApiResultCallback;
 import com.stripe.android.PaymentIntentResult;
@@ -26,6 +28,10 @@ import com.stripe.android.model.ConfirmPaymentIntentParams;
 import com.stripe.android.model.PaymentIntent;
 import com.stripe.android.model.PaymentMethodCreateParams;
 import com.stripe.android.view.CardInputWidget;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
@@ -53,9 +59,11 @@ public class checkout extends AppCompatActivity {
     private Stripe stripe;
     double finalCost;
     String cost;
+    String idOfTransaction;
     TextView total;
+    Button button;
     FirebaseAuth fAuth;
-    DatabaseReference toPath, fromPath;
+    DatabaseReference toPath, fromPath, db3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +75,22 @@ public class checkout extends AppCompatActivity {
         total = findViewById(R.id.amount_id);
         total.setText(cost);
         finalCost = Double.parseDouble(cost);
+        button = findViewById(R.id.button2);
 
         stripe = new Stripe(
                 getApplicationContext(),
                 Objects.requireNonNull("pk_test_51IfNeFIcNwtJp8IXhYhG4RxT7hdZbi6uzeCEQL4Gz7SPOWrMPdiQjViUL3EJ7MoErms6sWfApkBnj1IXQaTpPXTR00rcfN2LBg")
         );
+        // getting the employees unique log in number
+        fAuth = FirebaseAuth.getInstance();
+        String authUid = fAuth.getUid();
+        // getting the date and time the order was made
+        String myCurrentDateTime = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+        // getting the path to where the objects in the cart are stored
+        fromPath = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("cart");
+        // setting the path to where I want the objects in cart to go to on firebase
+        toPath = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("order").child(myCurrentDateTime);
+        db3 = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("coupon");
         startCheckout();
     }
 
@@ -127,21 +146,22 @@ public class checkout extends AppCompatActivity {
             PaymentIntent paymentIntent = result.getIntent();
             PaymentIntent.Status status = paymentIntent.getStatus();
             if (status == PaymentIntent.Status.Succeeded) {
-                // getting the date and time the order was made
-                String myCurrentDateTime = DateFormat.getDateTimeInstance()
-                        .format(Calendar.getInstance().getTime());
-                // getting the employees unique log in number
-                fAuth = FirebaseAuth.getInstance();
-                String authUid = fAuth.getUid();
-                // getting the path to where the objects in the cart are stored
-                fromPath = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("cart");
-                // setting the path to where I want the objects in cart to go to on firebase
-                toPath = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("order").child(myCurrentDateTime);
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+                // getting the id of the transaction for doing returns
+                try {
+                    JSONObject obj = new JSONObject(gson.toJson(paymentIntent));
+                    idOfTransaction = obj.getString("id");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
                 // for each object in the cart (cart branch) push to the order branch
                 fromPath.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         toPath.setValue(snapshot.getValue());
+                        orderInfo();
                     }
 
                     @Override
@@ -158,12 +178,9 @@ public class checkout extends AppCompatActivity {
                 }
                 // emptying the cart after the order has been successful
                 fromPath.removeValue();
-                orderObject obj = new orderObject();
-                obj.setCost(cost);
-                toPath.child("order info").setValue(obj);
-
-                DatabaseReference db3 = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("coupon");
+                // removing all products from the cart branch
                 db3.setValue(false);
+                // informing the employee the order was a success
                 Toast.makeText(activity, "Order completed!", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
             } else if (status == PaymentIntent.Status.RequiresPaymentMethod) {
@@ -232,5 +249,10 @@ public class checkout extends AppCompatActivity {
                 type
         );
         paymentIntentClientSecret = responseMap.get("clientSecret");
+    }
+
+    public void orderInfo () {
+        orderInfo orderInfo = new orderInfo(idOfTransaction, cost, false);
+        toPath.child("orderInfo").setValue(orderInfo);
     }
 }

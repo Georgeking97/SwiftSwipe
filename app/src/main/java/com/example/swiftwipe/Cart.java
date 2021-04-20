@@ -96,6 +96,7 @@ public class Cart extends AppCompatActivity {
         Context context = getApplicationContext();
         DatabaseReference db2 = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("coupon");
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("Coupon").child("Coupons");
+
         // checking to see if the user has already applied a coupon, if they haven't the value should be false
         db2.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
