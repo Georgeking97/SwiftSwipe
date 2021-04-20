@@ -66,8 +66,6 @@ public class order extends AppCompatActivity {
                 // letting the adapter know that to check the array again as it's increased in size
                 adapter.notifyDataSetChanged();
             }
-
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 

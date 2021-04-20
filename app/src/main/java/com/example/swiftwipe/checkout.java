@@ -19,7 +19,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.stripe.android.ApiResultCallback;
 import com.stripe.android.PaymentIntentResult;
@@ -38,7 +37,6 @@ import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +52,7 @@ import okhttp3.Response;
 public class checkout extends AppCompatActivity {
     // 10.0.2.2 is the Android emulator's alias to localhost
     private static final String BACKEND_URL = "https://stripe-payment-swiftswipe.herokuapp.com/";
-    private OkHttpClient httpClient = new OkHttpClient();
+    private final OkHttpClient httpClient = new OkHttpClient();
     private String paymentIntentClientSecret;
     private Stripe stripe;
     double finalCost;
@@ -63,7 +61,8 @@ public class checkout extends AppCompatActivity {
     TextView total;
     Button button;
     FirebaseAuth fAuth;
-    DatabaseReference toPath, fromPath, db3;
+    DatabaseReference toPath, fromPath;
+    boolean couponUsed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +70,7 @@ public class checkout extends AppCompatActivity {
         setContentView(R.layout.activity_checkout);
         // getting the total cost of the cart passed over from the cart activity
         cost = getIntent().getStringExtra("EXTRA_SESSION_ID");
+        couponUsed = getIntent().getBooleanExtra("coupon", false);
         // setting the amount the user will be paying when they click pay
         total = findViewById(R.id.amount_id);
         total.setText(cost);
@@ -79,7 +79,7 @@ public class checkout extends AppCompatActivity {
 
         stripe = new Stripe(
                 getApplicationContext(),
-                Objects.requireNonNull("pk_test_51IfNeFIcNwtJp8IXhYhG4RxT7hdZbi6uzeCEQL4Gz7SPOWrMPdiQjViUL3EJ7MoErms6sWfApkBnj1IXQaTpPXTR00rcfN2LBg")
+                "pk_test_51IfNeFIcNwtJp8IXhYhG4RxT7hdZbi6uzeCEQL4Gz7SPOWrMPdiQjViUL3EJ7MoErms6sWfApkBnj1IXQaTpPXTR00rcfN2LBg"
         );
         // getting the employees unique log in number
         fAuth = FirebaseAuth.getInstance();
@@ -87,10 +87,10 @@ public class checkout extends AppCompatActivity {
         // getting the date and time the order was made
         String myCurrentDateTime = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
         // getting the path to where the objects in the cart are stored
+        assert authUid != null;
         fromPath = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("cart");
         // setting the path to where I want the objects in cart to go to on firebase
         toPath = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("order").child(myCurrentDateTime);
-        db3 = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("coupon");
         startCheckout();
     }
 
@@ -178,8 +178,6 @@ public class checkout extends AppCompatActivity {
                 }
                 // emptying the cart after the order has been successful
                 fromPath.removeValue();
-                // removing all products from the cart branch
-                db3.setValue(false);
                 // informing the employee the order was a success
                 Toast.makeText(activity, "Order completed!", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
@@ -201,6 +199,7 @@ public class checkout extends AppCompatActivity {
             activity.displayAlert("Error", e.toString());
         }
     }
+
     private void displayAlert(@NonNull String title,
                               @Nullable String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
@@ -209,11 +208,13 @@ public class checkout extends AppCompatActivity {
         builder.setPositiveButton("Ok", null);
         builder.create().show();
     }
+
     private static final class PayCallback implements Callback {
         @NonNull private final WeakReference<checkout> activityRef;
         PayCallback(@NonNull checkout activity) {
             activityRef = new WeakReference<>(activity);
         }
+
         @Override
         public void onFailure(@NonNull Call call, @NonNull IOException e) {
             final checkout activity = activityRef.get();
@@ -224,6 +225,7 @@ public class checkout extends AppCompatActivity {
                     Toast.makeText(activity, "Error: " + e.toString(), Toast.LENGTH_LONG).show()
             );
         }
+
         @Override
         public void onResponse(@NonNull Call call, @NonNull final Response response)
                 throws IOException {
@@ -241,6 +243,7 @@ public class checkout extends AppCompatActivity {
             }
         }
     }
+
     private void onPaymentSuccess(@NonNull final Response response) throws IOException {
         Gson gson = new Gson();
         Type type = new TypeToken<Map<String, String>>(){}.getType();
@@ -252,7 +255,7 @@ public class checkout extends AppCompatActivity {
     }
 
     public void orderInfo () {
-        orderInfo orderInfo = new orderInfo(idOfTransaction, cost, false);
+        orderInfo orderInfo = new orderInfo(idOfTransaction, cost, false, couponUsed);
         toPath.child("orderInfo").setValue(orderInfo);
     }
 }

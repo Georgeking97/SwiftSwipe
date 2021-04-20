@@ -33,8 +33,8 @@ public class Cart extends AppCompatActivity {
     TextView total;
     Button checkout, applyCouponBtn;
     EditText coupon;
-    boolean used;
-    double finalvalue = 0;
+    boolean example = false;
+    double finalValue = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +77,9 @@ public class Cart extends AppCompatActivity {
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Information info = ds.getValue(Information.class);
                     //adding the individual prices together to calculate the total
-                    finalvalue = finalvalue + info.getProductPrice();
+                    finalValue = finalValue + info.getProductPrice();
                     //setting the total to the textview
-                    total.setText(finalvalue+"");
+                    total.setText(finalValue+"");
                 }
             }
 
@@ -91,32 +91,14 @@ public class Cart extends AppCompatActivity {
     }
     // gets the unique token associated with the signed in account from firebase auth
     private void applyCoupon(){
-        fAuth = FirebaseAuth.getInstance();
-        String authUid = fAuth.getUid();
         Context context = getApplicationContext();
-        DatabaseReference db2 = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("coupon");
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("Coupon").child("Coupons");
-
-        // checking to see if the user has already applied a coupon, if they haven't the value should be false
-        db2.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                used = (Boolean) snapshot.getValue();
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
 
         applyCouponBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // getting the coupon code the user entered
                 String input = coupon.getText().toString().trim();
-                double percentage;
                 // error handling if no coupon has been entered and they click the button
                 if (TextUtils.isEmpty(input)) {
                     coupon.setError("Please enter a coupon");
@@ -128,19 +110,20 @@ public class Cart extends AppCompatActivity {
                             for (DataSnapshot ds : snapshot.getChildren()){
                                 Coupon coupon = ds.getValue(Coupon.class);
                                 //if the users entered value matches a coupon on the database and the employee hasn't already used a coupon
-                                if (coupon.getCode().equals(input)&& used == false){
+                                if (coupon.getCode().equals(input) && example == false){
                                     // dividing the total basket cost by 100 and multiplying it by the discount of the code to get the amount to take away
-                                    double percentage = finalvalue/100 * coupon.getValue();
+                                    double percentage = finalValue/100 * coupon.getValue();
                                     // taking the amount away from the total cost and updating the view
-                                    finalvalue = finalvalue - percentage;
+                                    finalValue = finalValue - percentage;
                                     // letting the user know the coupon was successfully applied
                                     Toast.makeText(context, "Coupon applied!", Toast.LENGTH_SHORT).show();
-                                    total.setText(finalvalue+"");
+                                    total.setText(finalValue+"");
                                     // if a coupon is used we set the used coupon branch to true to only allow one coupon used per cart
-                                    db2.setValue(true);
+                                    //test[0] = true;
+                                    example = true;
                                     break;
                                 } else {
-                                    //Toast.makeText(context, "Coupon doesn't exist!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "Coupon doesn't exist!", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }
@@ -160,8 +143,9 @@ public class Cart extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), checkout.class);
-                String pass = finalvalue + "";
+                String pass = finalValue + "";
                 intent.putExtra("EXTRA_SESSION_ID", pass);
+                intent.putExtra("coupon", example);
                 startActivity(intent);
             }
         });
