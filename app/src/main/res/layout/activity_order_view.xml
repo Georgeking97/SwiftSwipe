@@ -10,7 +10,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView2"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="250dp"
         android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -23,10 +23,92 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="65dp"
+        android:layout_marginTop="212dp"
         android:onClick="refund"
         android:text="Refund"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recyclerView2" />
+
+    <TextView
+        android:id="@+id/transactionIdTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/transactionIdTxt2"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView2" />
+
+    <TextView
+        android:id="@+id/priceTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="@+id/transactionIdTxt"
+        app:layout_constraintStart_toStartOf="@+id/transactionIdTxt"
+        app:layout_constraintTop_toBottomOf="@+id/transactionIdTxt" />
+
+    <TextView
+        android:id="@+id/returnedTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="@+id/priceTxt"
+        app:layout_constraintStart_toStartOf="@+id/priceTxt"
+        app:layout_constraintTop_toBottomOf="@+id/priceTxt" />
+
+    <TextView
+        android:id="@+id/couponTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="@+id/returnedTxt"
+        app:layout_constraintStart_toStartOf="@+id/returnedTxt"
+        app:layout_constraintTop_toBottomOf="@+id/returnedTxt" />
+
+    <TextView
+        android:id="@+id/transactionIdTxt2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Transaction ID:"
+        app:layout_constraintBottom_toBottomOf="@+id/transactionIdTxt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView2"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/priceTxt2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Returned:"
+        app:layout_constraintEnd_toEndOf="@+id/returnedTxt2"
+        app:layout_constraintStart_toStartOf="@+id/returnedTxt2"
+        app:layout_constraintTop_toBottomOf="@+id/returnedTxt2" />
+
+    <TextView
+        android:id="@+id/returnedTxt2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Price:"
+        app:layout_constraintEnd_toEndOf="@+id/transactionIdTxt2"
+        app:layout_constraintStart_toStartOf="@+id/transactionIdTxt2"
+        app:layout_constraintTop_toBottomOf="@+id/transactionIdTxt2" />
+
+    <TextView
+        android:id="@+id/couponTxt2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Coupon:"
+        app:layout_constraintEnd_toEndOf="@+id/priceTxt2"
+        app:layout_constraintStart_toStartOf="@+id/priceTxt2"
+        app:layout_constraintTop_toBottomOf="@+id/priceTxt2" />
 </androidx.constraintlayout.widget.ConstraintLayout>

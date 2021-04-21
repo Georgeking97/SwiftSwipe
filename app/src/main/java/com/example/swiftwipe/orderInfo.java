@@ -12,4 +12,39 @@ public class orderInfo {
         this.returned = returned;
         this.coupon = coupon;
     }
+
+    public orderInfo() {
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    public String getCost() {
+        return cost;
+    }
+
+    public void setCost(String cost) {
+        this.cost = cost;
+    }
+
+    public boolean isReturned() {
+        return returned;
+    }
+
+    public void setReturned(boolean returned) {
+        this.returned = returned;
+    }
+
+    public boolean isCoupon() {
+        return coupon;
+    }
+
+    public void setCoupon(boolean coupon) {
+        this.coupon = coupon;
+    }
 }

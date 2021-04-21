@@ -2,6 +2,7 @@ package com.example.swiftwipe;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,6 +42,7 @@ public class orderView extends AppCompatActivity {
     InformationAdapter adapter;
     int totalObjects;
     FirebaseRecyclerOptions<Information> options;
+    TextView transactionId, price, coupon, returned;
     private OkHttpClient httpClient = new OkHttpClient();
     private Stripe stripe;
 
@@ -49,6 +51,11 @@ public class orderView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_view);
         recyclerView = findViewById(R.id.recyclerView2);
+
+        transactionId = findViewById(R.id.transactionIdTxt);
+        price = findViewById(R.id.priceTxt);
+        coupon = findViewById(R.id.couponTxt);
+        returned = findViewById(R.id.returnedTxt);
 
         stripe = new Stripe(
                 getApplicationContext(),
@@ -70,10 +77,32 @@ public class orderView extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 totalObjects = (int) snapshot.getChildrenCount();
-                options = new FirebaseRecyclerOptions.Builder<Information>().setQuery(userdbref.limitToFirst(totalObjects-1), Information.class).build();
+                options = new FirebaseRecyclerOptions.Builder<Information>().setQuery(userdbref.limitToFirst(totalObjects - 1), Information.class).build();
                 adapter = new InformationAdapter(options);
                 recyclerView.setAdapter(adapter);
                 adapter.startListening();
+                // if you remove this the program will crash when you click on an item view in the recycler
+                adapter.setOnItemClickListener(new InformationAdapter.ClickListener() {
+                    @Override
+                    public void onItemClick(int position, View v) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        userdbref.child("orderInfo").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                orderInfo orderInfo = snapshot.getValue(orderInfo.class);
+                transactionId.setText(orderInfo.getTransactionId());
+                price.setText(orderInfo.getCost());
+                coupon.setText(String.valueOf(orderInfo.isCoupon()));
+                returned.setText(String.valueOf(orderInfo.isReturned()));
             }
 
             @Override
@@ -86,6 +115,7 @@ public class orderView extends AppCompatActivity {
 
     // these two methods(onStart & onStop) are absolutely necessary for the recyclerview to populate
     // firebase adapters have to listen I guess
+    // moved the start listener up to the value event listener due to timing issues
     @Override
     protected void onStart() {
         super.onStart();
@@ -108,7 +138,6 @@ public class orderView extends AppCompatActivity {
         Request request = new Request.Builder().url(BACKEND_URL + "create-payment-refund").post(body).build();
         // sending the request
         httpClient.newCall(request).enqueue(new orderView.PayCallback(this));
-
     }
 
     private static final class PayCallback implements Callback {
