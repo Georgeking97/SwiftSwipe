@@ -2,6 +2,7 @@ package com.example.swiftwipe;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,15 +37,17 @@ import okhttp3.Response;
 
 public class orderView extends AppCompatActivity {
     private static final String BACKEND_URL = "https://stripe-payment-swiftswipe.herokuapp.com/";
+    private OkHttpClient httpClient = new OkHttpClient();
+    FirebaseAuth fAuth;
+    FirebaseRecyclerOptions<Information> options;
     DatabaseReference userdbref;
     RecyclerView recyclerView;
-    FirebaseAuth fAuth;
     InformationAdapter adapter;
     int totalObjects;
-    FirebaseRecyclerOptions<Information> options;
     TextView transactionId, price, coupon, returned;
-    private OkHttpClient httpClient = new OkHttpClient();
-    private Stripe stripe;
+    String id;
+    Button button;
+    Boolean test;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +59,8 @@ public class orderView extends AppCompatActivity {
         price = findViewById(R.id.priceTxt);
         coupon = findViewById(R.id.couponTxt);
         returned = findViewById(R.id.returnedTxt);
+        button = findViewById(R.id.refundButton);
 
-        stripe = new Stripe(
-                getApplicationContext(),
-                Objects.requireNonNull("pk_test_51IfNeFIcNwtJp8IXhYhG4RxT7hdZbi6uzeCEQL4Gz7SPOWrMPdiQjViUL3EJ7MoErms6sWfApkBnj1IXQaTpPXTR00rcfN2LBg")
-        );
 
         String branchId = getIntent().getStringExtra("branch");
         System.out.println(branchId);
@@ -82,11 +82,7 @@ public class orderView extends AppCompatActivity {
                 recyclerView.setAdapter(adapter);
                 adapter.startListening();
                 // if you remove this the program will crash when you click on an item view in the recycler
-                adapter.setOnItemClickListener(new InformationAdapter.ClickListener() {
-                    @Override
-                    public void onItemClick(int position, View v) {
-
-                    }
+                adapter.setOnItemClickListener((position, v) -> {
                 });
             }
 
@@ -99,10 +95,17 @@ public class orderView extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 orderInfo orderInfo = snapshot.getValue(orderInfo.class);
-                transactionId.setText(orderInfo.getTransactionId());
+                id = orderInfo.getTransactionId();
+                test = orderInfo.isReturned();
+                transactionId.setText(id);
                 price.setText(orderInfo.getCost());
                 coupon.setText(String.valueOf(orderInfo.isCoupon()));
-                returned.setText(String.valueOf(orderInfo.isReturned()));
+                returned.setText(String.valueOf(test));
+
+                if (test== true){
+                    button.setText("Order has been refunded");
+                    button.setEnabled(false);
+                }
             }
 
             @Override
@@ -131,13 +134,20 @@ public class orderView extends AppCompatActivity {
     public void refund(View view) {
         // creating my request to send to my Node.js server
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
-        Map<String, Object> payMap = new HashMap<>();
-        payMap.put("currency", "eur");
-        String json = new Gson().toJson(payMap);
+        Map<String, Object> idMap = new HashMap<>();
+        // my node.js server is expecting an id identifier and then the id object which is the transaction id
+        idMap.put("id", id);
+        String json = new Gson().toJson(idMap);
         RequestBody body = RequestBody.create(json, mediaType);
+        // build the request to send, create-payment-refund is the endpoint
         Request request = new Request.Builder().url(BACKEND_URL + "create-payment-refund").post(body).build();
         // sending the request
         httpClient.newCall(request).enqueue(new orderView.PayCallback(this));
+        // updating the return status on the database
+        userdbref.child("orderInfo").child("returned").setValue(true);
+        button.setText("Order has been refunded");
+        button.setEnabled(false);
+
     }
 
     private static final class PayCallback implements Callback {
