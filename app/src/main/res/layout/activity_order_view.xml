@@ -11,11 +11,12 @@
         android:id="@+id/recyclerView2"
         android:layout_width="match_parent"
         android:layout_height="250dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:itemCount="1"
+        tools:itemCount="2"
         tools:listitem="@layout/informationlist" />
 
     <GridLayout
@@ -50,6 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Price:"
+                    android:textColor="#ff9999"
                     android:gravity="left"
                     android:paddingLeft="15dp"
                     android:textAlignment="gravity"
@@ -58,6 +60,7 @@
 
                 <TextView
                     android:id="@+id/priceTxt"
+                    android:textColor="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="49dp"
@@ -89,20 +92,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="15dp"
-                    android:text="Returned:"
+                    android:textColor="#ff9999"
+                    android:text="Coupon:"
                     android:textAlignment="gravity"
                     android:gravity="left"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/returnedTxt"
+                    android:id="@+id/couponTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Boolean"
+                    android:textColor="@color/white"
                     android:textAlignment="center"
                     android:textSize="18sp"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="31dp"
                     android:textStyle="bold" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -128,19 +133,21 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Coupon:"
+                    android:text="Returned:"
+                    android:textColor="#ff9999"
                     android:paddingLeft="15dp"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/couponTxt"
+                    android:id="@+id/returnedTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Boolean"
+                    android:textColor="@color/white"
                     android:textAlignment="center"
                     android:textSize="18sp"
-                    android:paddingLeft="31dp"
+                    android:paddingLeft="20dp"
                     android:textStyle="bold" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -170,6 +177,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="#272928"
                     android:onClick="refund"
+                    android:textColor="#ff9999"
                     android:text="Refund"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
