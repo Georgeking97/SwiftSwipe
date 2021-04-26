@@ -26,15 +26,15 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class Cart extends AppCompatActivity {
-    DatabaseReference userdbref;
-    RecyclerView recyclerView;
-    FirebaseAuth fAuth;
-    CartAdapter adapter;
-    TextView total;
-    Button checkout, applyCouponBtn;
-    EditText coupon;
-    boolean example = false;
-    double finalValue = 0;
+    private DatabaseReference userdbref;
+    private RecyclerView recyclerView;
+    private FirebaseAuth fAuth;
+    private CartAdapter adapter;
+    private TextView total;
+    private Button checkout, applyCouponBtn;
+    private EditText coupon;
+    private boolean example = false;
+    private double finalValue = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

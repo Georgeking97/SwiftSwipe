@@ -15,7 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Design.NoActionBar">
         <activity android:name=".orderView"></activity>
-        <activity android:name=".orderReturn" />
         <activity android:name=".order" />
         <activity android:name=".checkout" />
         <activity android:name=".product" />

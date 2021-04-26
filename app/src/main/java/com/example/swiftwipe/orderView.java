@@ -19,13 +19,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
-import com.stripe.android.Stripe;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -37,33 +35,31 @@ import okhttp3.Response;
 
 public class orderView extends AppCompatActivity {
     private static final String BACKEND_URL = "https://stripe-payment-swiftswipe.herokuapp.com/";
-    private OkHttpClient httpClient = new OkHttpClient();
-    FirebaseAuth fAuth;
-    FirebaseRecyclerOptions<Information> options;
-    DatabaseReference userdbref;
-    RecyclerView recyclerView;
-    InformationAdapter adapter;
-    int totalObjects;
-    TextView transactionId, price, coupon, returned;
-    String id;
-    Button button;
-    Boolean test;
+    private final OkHttpClient httpClient = new OkHttpClient();
+    private FirebaseAuth fAuth;
+    private FirebaseRecyclerOptions<Information> options;
+    private DatabaseReference userdbref;
+    private RecyclerView recyclerView;
+    private InformationAdapter adapter;
+    private TextView transactionIdTxt, priceTxt, couponTxt, returnedTxt;
+    private String id;
+    private int totalObjects;
+    private Button refundButton;
+    private Boolean returned;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_view);
+
         recyclerView = findViewById(R.id.recyclerView2);
-
-        transactionId = findViewById(R.id.transactionIdTxt);
-        price = findViewById(R.id.priceTxt);
-        coupon = findViewById(R.id.couponTxt);
-        returned = findViewById(R.id.returnedTxt);
-        button = findViewById(R.id.refundButton);
-
-
+        transactionIdTxt = findViewById(R.id.transactionIdTxt);
+        priceTxt = findViewById(R.id.priceTxt);
+        couponTxt = findViewById(R.id.couponTxt);
+        returnedTxt = findViewById(R.id.returnedTxt);
+        refundButton = findViewById(R.id.refundButton);
+            
         String branchId = getIntent().getStringExtra("branch");
-        System.out.println(branchId);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
@@ -71,8 +67,44 @@ public class orderView extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         String authUid = fAuth.getUid();
 
-        // branch where the objects I want are
         userdbref = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("order").child(branchId);
+
+        settingRecycler();
+        populatingOrderInfo();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
+
+    public void populatingOrderInfo(){
+        userdbref.child("orderInfo").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                orderInfo orderInfo = snapshot.getValue(orderInfo.class);
+                id = orderInfo.getTransactionId();
+                returned = orderInfo.isReturned();
+                transactionIdTxt.setText(id);
+                priceTxt.setText(orderInfo.getCost());
+                couponTxt.setText(String.valueOf(orderInfo.isCoupon()));
+                returnedTxt.setText(String.valueOf(returned));
+                // so that an order can't be returned more than once
+                if (returned){
+                    refundButton.setText("Order has been refunded");
+                    refundButton.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void settingRecycler(){
         userdbref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -91,46 +123,8 @@ public class orderView extends AppCompatActivity {
 
             }
         });
-        userdbref.child("orderInfo").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                orderInfo orderInfo = snapshot.getValue(orderInfo.class);
-                id = orderInfo.getTransactionId();
-                test = orderInfo.isReturned();
-                transactionId.setText(id);
-                price.setText(orderInfo.getCost());
-                coupon.setText(String.valueOf(orderInfo.isCoupon()));
-                returned.setText(String.valueOf(test));
-
-                if (test== true){
-                    button.setText("Order has been refunded");
-                    button.setEnabled(false);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
 
-
-    // these two methods(onStart & onStop) are absolutely necessary for the recyclerview to populate
-    // firebase adapters have to listen I guess
-    // moved the start listener up to the value event listener due to timing issues
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
-    }
-
-    // on click method for the refund button in activity_order_view
     public void refund(View view) {
         // creating my request to send to my Node.js server
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
@@ -145,9 +139,9 @@ public class orderView extends AppCompatActivity {
         httpClient.newCall(request).enqueue(new orderView.PayCallback(this));
         // updating the return status on the database
         userdbref.child("orderInfo").child("returned").setValue(true);
-        button.setText("Order has been refunded");
-        button.setEnabled(false);
-
+        refundButton.setText("Order has been refunded");
+        refundButton.setEnabled(false);
+        Toast.makeText(orderView.this, "Refund successful.", Toast.LENGTH_SHORT).show();
     }
 
     private static final class PayCallback implements Callback {
@@ -170,7 +164,7 @@ public class orderView extends AppCompatActivity {
         }
 
         @Override
-        public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
+        public void onResponse(@NonNull Call call, @NonNull final Response response) {
 
         }
     }

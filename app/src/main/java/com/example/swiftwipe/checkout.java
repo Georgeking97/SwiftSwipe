@@ -55,14 +55,14 @@ public class checkout extends AppCompatActivity {
     private final OkHttpClient httpClient = new OkHttpClient();
     private String paymentIntentClientSecret;
     private Stripe stripe;
-    double finalCost;
-    String cost;
-    String idOfTransaction;
-    TextView total;
-    Button button;
-    FirebaseAuth fAuth;
-    DatabaseReference toPath, fromPath;
-    boolean couponUsed;
+    private double finalCost;
+    private String cost;
+    private String idOfTransaction;
+    private TextView total;
+    private Button button;
+    private FirebaseAuth fAuth;
+    private DatabaseReference toPath, fromPath;
+    private boolean couponUsed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

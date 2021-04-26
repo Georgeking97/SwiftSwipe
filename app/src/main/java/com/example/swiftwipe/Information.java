@@ -3,7 +3,7 @@ package com.example.swiftwipe;
 public class Information {
 
     private String productName;
-    public int productPrice;
+    private int productPrice;
     private String productSize;
     private String productImage;
     private String productid;

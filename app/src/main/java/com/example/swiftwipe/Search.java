@@ -23,10 +23,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class Search extends AppCompatActivity {
-    DatabaseReference dbref;
-    RecyclerView recyclerView;
-    InformationAdapter adapter;
-    EditText searchInput;
+    private DatabaseReference dbref;
+    private RecyclerView recyclerView;
+    private InformationAdapter adapter;
+    private EditText searchInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

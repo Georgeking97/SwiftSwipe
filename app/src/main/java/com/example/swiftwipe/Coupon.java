@@ -4,7 +4,7 @@ public class Coupon {
     public String code;
     public int value;
 
-    public Coupon(String code, int value, boolean used) {
+    public Coupon(String code, int value) {
         this.code = code;
         this.value = value;
     }

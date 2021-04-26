@@ -13,9 +13,9 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import java.util.ArrayList;
 
 public class orderAdapter extends RecyclerView.Adapter<orderAdapter.MyViewHolder> {
-    ArrayList<orderModel> mList;
+    private ArrayList<orderModel> mList;
     private static clickListener listener;
-    Context context;
+    private Context context;
 
     public orderAdapter(ArrayList<orderModel> mList, Context context, clickListener listener) {
         this.mList = mList;

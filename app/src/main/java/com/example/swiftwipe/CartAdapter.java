@@ -17,7 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class CartAdapter extends FirebaseRecyclerAdapter<Information, CartAdapter.MyViewHolder> {
-    FirebaseAuth fAuth;
+    private FirebaseAuth fAuth;
 
     public CartAdapter(@NonNull FirebaseRecyclerOptions<Information> options) {
         super(options);

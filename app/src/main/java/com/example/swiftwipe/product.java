@@ -19,12 +19,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class product extends AppCompatActivity {
-    Information newInformation;
-    TextView name, price, size, id;
-    ImageView image;
-    Button button;
-    DatabaseReference dbref, userdbref;
-    FirebaseAuth fAuth;
+    private Information newInformation;
+    private TextView name, price, size, id;
+    private ImageView image;
+    private Button button;
+    private DatabaseReference dbref, userdbref;
+    private FirebaseAuth fAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

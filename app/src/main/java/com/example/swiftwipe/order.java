@@ -21,8 +21,8 @@ import java.util.ArrayList;
 public class order extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    FirebaseAuth fAuth;
-    DatabaseReference userdbref;
+    private FirebaseAuth fAuth;
+    private DatabaseReference userdbref;
     private orderAdapter adapter;
     private ArrayList<orderModel> list;
     private orderAdapter.clickListener listener;

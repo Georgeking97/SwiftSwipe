@@ -19,11 +19,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class Register extends AppCompatActivity {
-    EditText mFullName, mEmail, mPassword, mPhone;
-    Button mRegisterBtn;
-    TextView mLoginBtn;
-    FirebaseAuth fAuth;
-    ProgressBar progressBar;
+    private EditText mFullName, mEmail, mPassword, mPhone;
+    private Button mRegisterBtn;
+    private TextView mLoginBtn;
+    private FirebaseAuth fAuth;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

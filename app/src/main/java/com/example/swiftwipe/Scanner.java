@@ -22,9 +22,9 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
 public class Scanner extends AppCompatActivity {
-    CodeScanner codeScanner;
-    CodeScannerView scannerView;
-    TextView resultData;
+    private CodeScanner codeScanner;
+    private CodeScannerView scannerView;
+    private TextView resultData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
