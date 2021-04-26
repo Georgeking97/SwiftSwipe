@@ -75,7 +75,6 @@ public class checkout extends AppCompatActivity {
         total = findViewById(R.id.amount_id);
         total.setText(cost);
         finalCost = Double.parseDouble(cost);
-        button = findViewById(R.id.button2);
 
         stripe = new Stripe(
                 getApplicationContext(),

@@ -11,104 +11,215 @@
         android:id="@+id/recyclerView2"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:itemCount="4"
+        tools:itemCount="1"
         tools:listitem="@layout/informationlist" />
 
-    <Button
-        android:id="@+id/refundButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="212dp"
-        android:onClick="refund"
-        android:text="Refund"
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_margin="10sp"
+        android:columnCount="1"
+        android:rowCount="3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView2" />
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView2">
 
-    <TextView
-        android:id="@+id/transactionIdTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/transactionIdTxt2"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView2" />
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:backgroundTint="#272928"
+            android:layout_height="wrap_content"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
 
-    <TextView
-        android:id="@+id/priceTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="@+id/transactionIdTxt"
-        app:layout_constraintStart_toStartOf="@+id/transactionIdTxt"
-        app:layout_constraintTop_toBottomOf="@+id/transactionIdTxt" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/returnedTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="@+id/priceTxt"
-        app:layout_constraintStart_toStartOf="@+id/priceTxt"
-        app:layout_constraintTop_toBottomOf="@+id/priceTxt" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Price:"
+                    android:gravity="left"
+                    android:paddingLeft="15dp"
+                    android:textAlignment="gravity"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/couponTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="@+id/returnedTxt"
-        app:layout_constraintStart_toStartOf="@+id/returnedTxt"
-        app:layout_constraintTop_toBottomOf="@+id/returnedTxt" />
+                <TextView
+                    android:id="@+id/priceTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="49dp"
+                    android:text="0.0"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/transactionIdTxt2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="Transaction ID:"
-        app:layout_constraintBottom_toBottomOf="@+id/transactionIdTxt"
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:backgroundTint="#272928"
+            android:layout_height="wrap_content"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="15dp"
+                    android:text="Returned:"
+                    android:textAlignment="gravity"
+                    android:gravity="left"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/returnedTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Boolean"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="20dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:backgroundTint="#272928"
+            android:layout_height="wrap_content"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Coupon:"
+                    android:paddingLeft="15dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/couponTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Boolean"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:paddingLeft="31dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:backgroundTint="#272928"
+            android:layout_height="wrap_content"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:onClick="refund"
+            android:layout_gravity="fill"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/refundButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#272928"
+                    android:onClick="refund"
+                    android:text="Refund"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </GridLayout>
+
+    <LinearLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="700dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView2"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/priceTxt2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Returned:"
-        app:layout_constraintEnd_toEndOf="@+id/returnedTxt2"
-        app:layout_constraintStart_toStartOf="@+id/returnedTxt2"
-        app:layout_constraintTop_toBottomOf="@+id/returnedTxt2" />
+        <ImageButton
+            android:id="@+id/homeBtn"
+            android:layout_width="0dp"
+            android:onClick="home"
+            android:layout_height="match_parent"
+            android:layout_weight=".25"
+            android:backgroundTint="#272928"
+            android:src="@drawable/ic_home_pink"/>
 
-    <TextView
-        android:id="@+id/returnedTxt2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Price:"
-        app:layout_constraintEnd_toEndOf="@+id/transactionIdTxt2"
-        app:layout_constraintStart_toStartOf="@+id/transactionIdTxt2"
-        app:layout_constraintTop_toBottomOf="@+id/transactionIdTxt2" />
+        <ImageButton
+            android:id="@+id/searchBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".25"
+            android:backgroundTint="#272928"
+            android:onClick="search"
+            android:src="@drawable/ic_pink_search"/>
 
-    <TextView
-        android:id="@+id/couponTxt2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Coupon:"
-        app:layout_constraintEnd_toEndOf="@+id/priceTxt2"
-        app:layout_constraintStart_toStartOf="@+id/priceTxt2"
-        app:layout_constraintTop_toBottomOf="@+id/priceTxt2" />
+        <ImageButton
+            android:id="@+id/barcodeBtn"
+            android:layout_width="0dp"
+            android:layout_weight=".25"
+            android:backgroundTint="#272928"
+            android:layout_height="match_parent"
+            android:onClick="scan"
+            android:src="@drawable/ic_pink_scan"/>
+
+        <ImageButton
+            android:id="@+id/cartBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:backgroundTint="#272928"
+            android:layout_weight=".25"
+            android:onClick="cart"
+            android:src="@drawable/ic_basket"/>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

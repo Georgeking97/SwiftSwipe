@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:backgroundTint="#272928"
+    android:backgroundTint="#949ca4"
     app:cardCornerRadius="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_margin="5dp"
-        android:background="#949ca4"
+        android:layout_margin="10dp"
+        android:background="#272928"
         app:layout_constraintEnd_toEndOf="@+id/ProductPrice"
         app:layout_constraintStart_toEndOf="@+id/ProductPrice">
 
@@ -20,6 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Order #"
+            android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

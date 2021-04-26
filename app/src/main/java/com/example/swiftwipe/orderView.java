@@ -1,5 +1,6 @@
 package com.example.swiftwipe;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -41,7 +42,7 @@ public class orderView extends AppCompatActivity {
     private DatabaseReference userdbref;
     private RecyclerView recyclerView;
     private InformationAdapter adapter;
-    private TextView transactionIdTxt, priceTxt, couponTxt, returnedTxt;
+    private TextView priceTxt, couponTxt, returnedTxt;
     private String id;
     private int totalObjects;
     private Button refundButton;
@@ -53,7 +54,7 @@ public class orderView extends AppCompatActivity {
         setContentView(R.layout.activity_order_view);
 
         recyclerView = findViewById(R.id.recyclerView2);
-        transactionIdTxt = findViewById(R.id.transactionIdTxt);
+
         priceTxt = findViewById(R.id.priceTxt);
         couponTxt = findViewById(R.id.couponTxt);
         returnedTxt = findViewById(R.id.returnedTxt);
@@ -86,7 +87,6 @@ public class orderView extends AppCompatActivity {
                 orderInfo orderInfo = snapshot.getValue(orderInfo.class);
                 id = orderInfo.getTransactionId();
                 returned = orderInfo.isReturned();
-                transactionIdTxt.setText(id);
                 priceTxt.setText(orderInfo.getCost());
                 couponTxt.setText(String.valueOf(orderInfo.isCoupon()));
                 returnedTxt.setText(String.valueOf(returned));
@@ -167,5 +167,29 @@ public class orderView extends AppCompatActivity {
         public void onResponse(@NonNull Call call, @NonNull final Response response) {
 
         }
+    }
+
+    //starting up the home activity
+    public void home(View view) {
+        orderView.this.finish();
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+    }
+
+    //starting up the search function
+    public void search(View view) {
+        orderView.this.finish();
+        startActivity(new Intent(getApplicationContext(), Search.class));
+    }
+
+    //Starting the barcode scanner
+    public void scan(View view) {
+        orderView.this.finish();
+        startActivity(new Intent(getApplicationContext(), Scanner.class));
+    }
+
+    //starting the cart activity
+    public void cart(View view) {
+        orderView.this.finish();
+        startActivity(new Intent(getApplicationContext(), Cart.class));
     }
 }

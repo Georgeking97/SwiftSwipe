@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="355dp"
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -17,9 +17,56 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            android:nestedScrollingEnabled="false"
-            app:spanCount="2"
-            tools:itemCount="5"
+            app:spanCount="3"
+            tools:itemCount="20"
             tools:listitem="@layout/orderlist" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="700dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/homeBtn"
+            android:layout_width="0dp"
+            android:onClick="home"
+            android:layout_height="match_parent"
+            android:layout_weight=".25"
+            android:backgroundTint="#272928"
+            android:src="@drawable/ic_home_pink"/>
+
+        <ImageButton
+            android:id="@+id/searchBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".25"
+            android:backgroundTint="#272928"
+            android:onClick="search"
+            android:src="@drawable/ic_pink_search"/>
+
+        <ImageButton
+            android:id="@+id/barcodeBtn"
+            android:layout_width="0dp"
+            android:layout_weight=".25"
+            android:backgroundTint="#272928"
+            android:layout_height="match_parent"
+            android:onClick="scan"
+            android:src="@drawable/ic_pink_scan"/>
+
+        <ImageButton
+            android:id="@+id/cartBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:backgroundTint="#272928"
+            android:layout_weight=".25"
+            android:onClick="cart"
+            android:src="@drawable/ic_basket"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

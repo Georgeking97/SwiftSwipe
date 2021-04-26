@@ -85,4 +85,28 @@ public class order extends AppCompatActivity {
             }
         };
     }
+
+    //starting up the home activity
+    public void home(View view) {
+        order.this.finish();
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+    }
+
+    //starting up the search function
+    public void search(View view) {
+        order.this.finish();
+        startActivity(new Intent(getApplicationContext(), Search.class));
+    }
+
+    //Starting the barcode scanner
+    public void scan(View view) {
+        order.this.finish();
+        startActivity(new Intent(getApplicationContext(), Scanner.class));
+    }
+
+    //starting the cart activity
+    public void cart(View view) {
+        order.this.finish();
+        startActivity(new Intent(getApplicationContext(), Cart.class));
+    }
 }

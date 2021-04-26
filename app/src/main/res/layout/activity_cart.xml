@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        tools:itemCount="8"
+        tools:itemCount="3"
         tools:listitem="@layout/cartlist" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -95,7 +95,7 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="700dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -104,21 +104,20 @@
         <ImageButton
             android:id="@+id/homeBtn"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:onClick="home"
+            android:layout_height="match_parent"
             android:layout_weight=".25"
             android:backgroundTint="#272928"
-            android:src="@drawable/ic_home"></ImageButton>
+            android:src="@drawable/ic_home_pink"/>
 
         <ImageButton
             android:id="@+id/searchBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/homeBtn"
             android:layout_weight=".25"
             android:backgroundTint="#272928"
             android:onClick="search"
-            android:src="@drawable/ic_magnifying_glass_2935435"></ImageButton>
+            android:src="@drawable/ic_pink_search"/>
 
         <ImageButton
             android:id="@+id/barcodeBtn"
@@ -126,22 +125,16 @@
             android:layout_weight=".25"
             android:backgroundTint="#272928"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/searchBtn"
             android:onClick="scan"
-            android:src="@drawable/ic_instagram_3814055"></ImageButton>
+            android:src="@drawable/ic_pink_scan"/>
 
         <ImageButton
             android:id="@+id/cartBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/barcodeBtn"
             android:backgroundTint="#272928"
             android:layout_weight=".25"
             android:onClick="cart"
-            android:src="@drawable/ic_magnifying_glass_2935435"></ImageButton>
+            android:src="@drawable/ic_basket"/>
     </LinearLayout>
-
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
