@@ -46,20 +46,6 @@ public class Search extends AppCompatActivity {
         adapter = new InformationAdapter(options);
         recyclerView.setAdapter(adapter);
 
-        dbref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ds: snapshot.getChildren()){
-                    System.out.println(ds.getKey());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
