@@ -25,6 +25,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
+
 public class Cart extends AppCompatActivity {
     private DatabaseReference userdbref;
     private RecyclerView recyclerView;
@@ -79,7 +81,7 @@ public class Cart extends AppCompatActivity {
                     //adding the individual prices together to calculate the total
                     finalValue = finalValue + info.getProductPrice();
                     //setting the total to the textview
-                    total.setText(finalValue+"");
+                    total.setText("€"+finalValue);
                 }
             }
 
@@ -93,12 +95,11 @@ public class Cart extends AppCompatActivity {
     private void applyCoupon(){
         Context context = getApplicationContext();
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("Coupon").child("Coupons");
-
         applyCouponBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // getting the coupon code the user entered
-                String input = coupon.getText().toString().trim();
+                String input = coupon.getText().toString().toLowerCase().trim();
                 // error handling if no coupon has been entered and they click the button
                 if (TextUtils.isEmpty(input)) {
                     coupon.setError("Please enter a coupon");
@@ -115,11 +116,12 @@ public class Cart extends AppCompatActivity {
                                     double percentage = finalValue/100 * coupon.getValue();
                                     // taking the amount away from the total cost and updating the view
                                     finalValue = finalValue - percentage;
+                                    DecimalFormat df = new DecimalFormat("##.##");
+                                    String finalValueString = df.format(finalValue);
                                     // letting the user know the coupon was successfully applied
                                     Toast.makeText(context, "Coupon applied!", Toast.LENGTH_SHORT).show();
-                                    total.setText(finalValue+"");
+                                    total.setText(finalValueString);
                                     // if a coupon is used we set the used coupon branch to true to only allow one coupon used per cart
-                                    //test[0] = true;
                                     example = true;
                                     break;
                                 } else {

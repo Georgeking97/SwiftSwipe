@@ -3,12 +3,12 @@ package com.example.swiftwipe;
 public class Information {
 
     private String productName;
-    private int productPrice;
+    private double productPrice;
     private String productSize;
     private String productImage;
     private String productid;
 
-    public Information(String productName, int productPrice, String productSize, String productImage, String productid) {
+    public Information(String productName, double productPrice, String productSize, String productImage, String productid) {
         this.productName = productName;
         this.productPrice = productPrice;
         this.productSize = productSize;
@@ -27,11 +27,11 @@ public class Information {
         this.productName = productName;
     }
 
-    public int getProductPrice() {
+    public double getProductPrice() {
         return productPrice;
     }
 
-    public void setProductPrice(int productPrice) {
+    public void setProductPrice(double productPrice) {
         this.productPrice = productPrice;
     }
 

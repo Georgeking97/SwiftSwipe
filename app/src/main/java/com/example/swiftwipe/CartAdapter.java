@@ -30,7 +30,7 @@ public class CartAdapter extends FirebaseRecyclerAdapter<Information, CartAdapte
 
         holder.name.setText(model.getProductName());
         holder.size.setText(model.getProductSize());
-        holder.price.setText(model.getProductPrice() + "");
+        holder.price.setText("€"+model.getProductPrice());
         holder.id.setText(model.getProductid());
         Glide.with(holder.image.getContext()).load(model.getProductImage()).into(holder.image);
         holder.deleteBtn.setOnClickListener(new View.OnClickListener(){

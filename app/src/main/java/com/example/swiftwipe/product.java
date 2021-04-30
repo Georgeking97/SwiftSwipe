@@ -10,8 +10,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,35 +23,28 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class product extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class product extends AppCompatActivity {
     private Information newInformation;
     private TextView name, price, id;
     private ImageView image;
     private Button button;
     private DatabaseReference dbref, userdbref;
     private FirebaseAuth fAuth;
-    private Spinner spinner;
-    private String item;
-    private productSize productSize;
-    final private String [] size2 = {"Choose Size", "Small", "Medium", "Large", "Extra-Large"};
+    private String size;
+    private RadioGroup radioGroupSizes;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
 
-        name = (TextView) findViewById(R.id.productName);
-        price = (TextView) findViewById(R.id.productPriceTxt);
-        image = (ImageView) findViewById(R.id.productImage);
-        button = (Button) findViewById(R.id.addBtn);
-        id = (TextView) findViewById(R.id.id);
-        spinner = findViewById(R.id.spinner);
-        spinner.setOnItemSelectedListener(this);
-
-        productSize = new productSize();
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, size2);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(arrayAdapter);
+        name = findViewById(R.id.productName);
+        price = findViewById(R.id.productPriceTxt);
+        image = findViewById(R.id.productImage);
+        button = findViewById(R.id.addBtn);
+        id =  findViewById(R.id.id);
+        radioGroupSizes = findViewById(R.id.radioGroupSizes);
 
         // getting the id from the search activity, required to allow me to populate the xml view
         String productId = getIntent().getStringExtra("EXTRA_SESSION_ID");
@@ -76,7 +71,7 @@ public class product extends AppCompatActivity implements AdapterView.OnItemSele
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 newInformation = snapshot.getValue(Information.class);
                 name.setText(newInformation.getProductName());
-                price.setText(newInformation.getProductPrice()+"");
+                price.setText("€"+newInformation.getProductPrice());
                 id.setText(newInformation.getProductid());
                 Glide.with(image.getContext()).load(newInformation.getProductImage()).into(image);
             }
@@ -94,36 +89,46 @@ public class product extends AppCompatActivity implements AdapterView.OnItemSele
                 dbref.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        fAuth = FirebaseAuth.getInstance();
-                        String authUid = fAuth.getUid();
-                        newInformation = snapshot.getValue(Information.class);
-                        String key = userdbref.push().getKey();
-                        newInformation.setProductid(key);
-                        newInformation.setProductSize(item);
-                        userdbref = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("cart").child(key);
-                        userdbref.setValue(newInformation);
+                        int checkId = radioGroupSizes.getCheckedRadioButtonId();
+                        if (checkId == -1){
+                            // no radio buttons have been clicked
+                            Toast.makeText(product.this, "Please select a size", Toast.LENGTH_SHORT).show();
+                        } else {
+                            findRadioButton(checkId);
+                            fAuth = FirebaseAuth.getInstance();
+                            String authUid = fAuth.getUid();
+                            newInformation = snapshot.getValue(Information.class);
+                            String key = userdbref.push().getKey();
+                            newInformation.setProductid(key);
+                            newInformation.setProductSize(size);
+                            userdbref = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("cart").child(key);
+                            userdbref.setValue(newInformation);
+                            //switching over to the cart activity
+                            Intent intent = new Intent(getApplicationContext(), Cart.class);
+                            startActivity(intent);
+                        }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                     }
                 });
-
-                //switching over to the cart activity
-                Intent intent = new Intent(getApplicationContext(), Cart.class);
-                startActivity(intent);
             }
         });
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        item = spinner.getSelectedItem().toString();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
+    private void findRadioButton(int checkId) {
+        switch(checkId){
+            case R.id.radioButtonS:
+                size = "Small";
+                break;
+            case R.id.radioButtonM:
+                size = "Medium";
+                break;
+            case R.id.radioButtonL:
+                size = "Large";
+                break;
+        }
     }
 
     //starting up the home activity

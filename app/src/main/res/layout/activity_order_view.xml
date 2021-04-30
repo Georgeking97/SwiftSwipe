@@ -10,13 +10,13 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView2"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="330dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:itemCount="2"
+        tools:itemCount="4"
         tools:listitem="@layout/informationlist" />
 
     <GridLayout
@@ -31,12 +31,12 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
-            android:backgroundTint="#272928"
             android:layout_height="wrap_content"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_gravity="fill"
             android:layout_margin="8dp"
+            android:backgroundTint="#272928"
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp">
 
@@ -50,21 +50,21 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Price:"
-                    android:textColor="#ff9999"
                     android:gravity="left"
                     android:paddingLeft="15dp"
+                    android:text="Price:"
                     android:textAlignment="gravity"
+                    android:textColor="#ff9999"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/priceTxt"
-                    android:textColor="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="49dp"
                     android:text="0.0"
+                    android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -72,12 +72,12 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
-            android:backgroundTint="#272928"
             android:layout_height="wrap_content"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_gravity="fill"
             android:layout_margin="8dp"
+            android:backgroundTint="#272928"
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp">
 
@@ -91,11 +91,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="left"
                     android:paddingLeft="15dp"
-                    android:textColor="#ff9999"
                     android:text="Coupon:"
                     android:textAlignment="gravity"
-                    android:gravity="left"
+                    android:textColor="#ff9999"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -103,23 +103,23 @@
                     android:id="@+id/couponTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Boolean"
-                    android:textColor="@color/white"
-                    android:textAlignment="center"
-                    android:textSize="18sp"
                     android:layout_marginLeft="31dp"
+                    android:text="Boolean"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
-            android:backgroundTint="#272928"
             android:layout_height="wrap_content"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_gravity="fill"
             android:layout_margin="8dp"
+            android:backgroundTint="#272928"
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp">
 
@@ -133,9 +133,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="15dp"
                     android:text="Returned:"
                     android:textColor="#ff9999"
-                    android:paddingLeft="15dp"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -143,26 +143,24 @@
                     android:id="@+id/returnedTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Boolean"
-                    android:textColor="@color/white"
-                    android:textAlignment="center"
-                    android:textSize="18sp"
                     android:paddingLeft="20dp"
+                    android:text="Boolean"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
-            android:backgroundTint="#272928"
             android:layout_height="wrap_content"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
-            android:onClick="refund"
             android:layout_gravity="fill"
             android:layout_margin="8dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="8dp">
+            android:backgroundTint="#272928"
+            app:cardCornerRadius="8dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -177,8 +175,8 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="#272928"
                     android:onClick="refund"
-                    android:textColor="#ff9999"
-                    android:text="Refund"/>
+                    android:text="Refund"
+                    android:textColor="#ff9999" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </GridLayout>

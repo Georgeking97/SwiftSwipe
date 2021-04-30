@@ -34,9 +34,13 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
+import java.sql.Time;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,16 +54,12 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class checkout extends AppCompatActivity {
-    // 10.0.2.2 is the Android emulator's alias to localhost
     private static final String BACKEND_URL = "https://stripe-payment-swiftswipe.herokuapp.com/";
     private final OkHttpClient httpClient = new OkHttpClient();
     private String paymentIntentClientSecret;
     private Stripe stripe;
     private double finalCost;
-    private String cost;
-    private String idOfTransaction;
-    private TextView total;
-    private Button button;
+    private String idOfTransaction, finalValueString, cost;
     private FirebaseAuth fAuth;
     private DatabaseReference toPath, fromPath;
     private boolean couponUsed;
@@ -72,10 +72,11 @@ public class checkout extends AppCompatActivity {
         cost = getIntent().getStringExtra("EXTRA_SESSION_ID");
         couponUsed = getIntent().getBooleanExtra("coupon", false);
         // setting the amount the user will be paying when they click pay
-        total = findViewById(R.id.amount_id);
-        total.setText(cost);
         finalCost = Double.parseDouble(cost);
-
+        DecimalFormat df = new DecimalFormat("##.##");
+        finalValueString = df.format(finalCost);
+        finalCost = Double.parseDouble(finalValueString);
+        // don't steal my key please & thank you
         stripe = new Stripe(
                 getApplicationContext(),
                 "pk_test_51IfNeFIcNwtJp8IXhYhG4RxT7hdZbi6uzeCEQL4Gz7SPOWrMPdiQjViUL3EJ7MoErms6sWfApkBnj1IXQaTpPXTR00rcfN2LBg"
@@ -85,6 +86,7 @@ public class checkout extends AppCompatActivity {
         String authUid = fAuth.getUid();
         // getting the date and time the order was made
         String myCurrentDateTime = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+
         // getting the path to where the objects in the cart are stored
         assert authUid != null;
         fromPath = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("cart");
@@ -96,7 +98,7 @@ public class checkout extends AppCompatActivity {
     private void startCheckout() {
         // Create a PaymentIntent by calling the server's endpoint.
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
-        double amount = finalCost * 100;
+        int amount = (int) (finalCost * 100);
         Map<String,Object> payMap = new HashMap<>();
         Map<String,Object> itemMap = new HashMap<>();
         List<Map<String, Object>> itemList = new ArrayList<>();
@@ -254,7 +256,7 @@ public class checkout extends AppCompatActivity {
     }
 
     public void orderInfo () {
-        orderInfo orderInfo = new orderInfo(idOfTransaction, cost, false, couponUsed);
+        orderInfo orderInfo = new orderInfo(idOfTransaction, finalValueString, false, couponUsed);
         toPath.child("orderInfo").setValue(orderInfo);
     }
 }

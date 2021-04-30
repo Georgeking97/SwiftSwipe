@@ -87,7 +87,7 @@ public class orderView extends AppCompatActivity {
                 orderInfo orderInfo = snapshot.getValue(orderInfo.class);
                 id = orderInfo.getTransactionId();
                 returned = orderInfo.isReturned();
-                priceTxt.setText(orderInfo.getCost());
+                priceTxt.setText("€"+orderInfo.getCost());
                 couponTxt.setText(String.valueOf(orderInfo.isCoupon()));
                 returnedTxt.setText(String.valueOf(returned));
                 // so that an order can't be returned more than once

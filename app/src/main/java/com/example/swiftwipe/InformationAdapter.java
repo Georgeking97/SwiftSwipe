@@ -25,7 +25,7 @@ public class InformationAdapter extends FirebaseRecyclerAdapter<Information, Inf
     protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull Information model) {
         holder.name.setText(model.getProductName());
         holder.size.setText(model.getProductSize());
-        holder.price.setText(model.getProductPrice()+"");
+        holder.price.setText("€"+model.getProductPrice());
         holder.id.setText(model.getProductid());
         Glide.with(holder.image.getContext()).load(model.getProductImage()).into(holder.image);
     }
