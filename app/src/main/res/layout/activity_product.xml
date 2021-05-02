@@ -127,9 +127,10 @@
 
     <Button
         android:id="@+id/addBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/header_background"
         android:backgroundTint="#272928"
         android:text="Add to cart"
         android:textSize="18sp"

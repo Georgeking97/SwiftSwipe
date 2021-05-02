@@ -81,7 +81,9 @@ public class Cart extends AppCompatActivity {
                     //adding the individual prices together to calculate the total
                     finalValue = finalValue + info.getProductPrice();
                     //setting the total to the textview
-                    total.setText("€"+finalValue);
+                    DecimalFormat df = new DecimalFormat("##.##");
+                    String finalValueString = df.format(finalValue);
+                    total.setText("€"+finalValueString);
                 }
             }
 

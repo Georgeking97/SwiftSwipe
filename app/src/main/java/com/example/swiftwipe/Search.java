@@ -37,7 +37,7 @@ public class Search extends AppCompatActivity {
         searchInput = findViewById(R.id.searchBar);
 
         // providing path to firebase branch I want to query
-        dbref = FirebaseDatabase.getInstance().getReference("Test");
+        dbref = FirebaseDatabase.getInstance().getReference("Product");
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 

@@ -51,7 +51,7 @@ public class product extends AppCompatActivity {
 
         // setting up the path to the product on the firebase database, getting the data for the xml view
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        dbref = database.getReference("Test").child(productId);
+        dbref = database.getReference("Product").child(productId);
 
         // setting up the path to the cart branch to push the object value to
         fAuth = FirebaseAuth.getInstance();
