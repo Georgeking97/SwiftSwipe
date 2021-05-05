@@ -88,7 +88,6 @@ public class checkout extends AppCompatActivity {
         String myCurrentDateTime = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 
         // getting the path to where the objects in the cart are stored
-        assert authUid != null;
         fromPath = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("cart");
         // setting the path to where I want the objects in cart to go to on firebase
         toPath = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("order").child(myCurrentDateTime);
@@ -126,6 +125,7 @@ public class checkout extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

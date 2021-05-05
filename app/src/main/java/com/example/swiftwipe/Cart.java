@@ -93,7 +93,6 @@ public class Cart extends AppCompatActivity {
             }
         });
     }
-    // gets the unique token associated with the signed in account from firebase auth
     private void applyCoupon(){
         Context context = getApplicationContext();
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("Coupon").child("Coupons");

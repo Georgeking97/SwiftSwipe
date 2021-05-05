@@ -58,7 +58,6 @@ public class order extends AppCompatActivity {
                     orderModel model = ds.getValue(orderModel.class);
                     // remapping the only variable to the parent key
                     key =  ds.getKey();
-
                     model.setKey(key);
                     // increasing the array size for the adapter
                     list.add(model);
@@ -78,7 +77,6 @@ public class order extends AppCompatActivity {
             @Override
             public void onClick(View v, int position) {
                 String result = list.get(position).getKey();
-                System.out.println(result);
                 Intent intent = new Intent(getApplicationContext(), orderView.class);
                 intent.putExtra("branch", result);
                 startActivity(intent);

@@ -59,11 +59,11 @@ public class orderView extends AppCompatActivity {
         couponTxt = findViewById(R.id.couponTxt);
         returnedTxt = findViewById(R.id.returnedTxt);
         refundButton = findViewById(R.id.refundButton);
-            
-        String branchId = getIntent().getStringExtra("branch");
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
+            
+        String branchId = getIntent().getStringExtra("branch");
 
         fAuth = FirebaseAuth.getInstance();
         String authUid = fAuth.getUid();
