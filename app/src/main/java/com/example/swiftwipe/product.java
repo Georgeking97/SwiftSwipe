@@ -61,7 +61,6 @@ public class product extends AppCompatActivity {
         setValues();
         addItemToCart();
 
-
     }
 
     // setting the values in the xml view based on the product ID passed in from search

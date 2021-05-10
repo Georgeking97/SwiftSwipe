@@ -27,12 +27,10 @@
         android:id="@+id/cartInfo"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cart_list"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/textView6"
@@ -58,10 +56,10 @@
 
         <Button
             android:id="@+id/payBtn"
-            android:background="@drawable/header_background"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:background="@drawable/header_background"
             android:backgroundTint="#272928"
             android:text="Pay"
             android:textColor="#FFFFFF"

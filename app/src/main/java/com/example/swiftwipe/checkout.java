@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -34,17 +34,15 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -87,9 +85,10 @@ public class checkout extends AppCompatActivity {
         // getting the date and time the order was made
         String myCurrentDateTime = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 
-        // getting the path to where the objects in the cart are stored
+        // getting the path from where the objects in the cart are stored
         fromPath = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("cart");
         // setting the path to where I want the objects in cart to go to on firebase
+        // this is done so that there is an order history on the database
         toPath = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("order").child(myCurrentDateTime);
         startCheckout();
     }
@@ -97,6 +96,8 @@ public class checkout extends AppCompatActivity {
     private void startCheckout() {
         // Create a PaymentIntent by calling the server's endpoint.
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
+        // Could be improved that I deal with ints from beginning but codebase is delicate
+        // and submission is due soon
         int amount = (int) (finalCost * 100);
         Map<String,Object> payMap = new HashMap<>();
         Map<String,Object> itemMap = new HashMap<>();
@@ -132,8 +133,7 @@ public class checkout extends AppCompatActivity {
         // Handle the result of stripe.confirmPayment
         stripe.onPaymentResult(requestCode, data, new PaymentResultCallback(this));
     }
-    private final class PaymentResultCallback
-            implements ApiResultCallback<PaymentIntentResult> {
+    private final class PaymentResultCallback implements ApiResultCallback<PaymentIntentResult> {
         @NonNull private final WeakReference<checkout> activityRef;
         PaymentResultCallback(@NonNull checkout activity) {
             activityRef = new WeakReference<>(activity);
@@ -148,7 +148,6 @@ public class checkout extends AppCompatActivity {
             PaymentIntent.Status status = paymentIntent.getStatus();
             if (status == PaymentIntent.Status.Succeeded) {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
                 // getting the id of the transaction for doing returns
                 try {
                     JSONObject obj = new JSONObject(gson.toJson(paymentIntent));

@@ -93,6 +93,10 @@ public class Cart extends AppCompatActivity {
             }
         });
     }
+
+    private void updateTotal(){
+        total.getText();
+    }
     private void applyCoupon(){
         Context context = getApplicationContext();
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("Coupon").child("Coupons");

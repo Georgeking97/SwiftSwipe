@@ -4,7 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,13 +24,13 @@ import com.karumi.dexter.listener.single.PermissionListener;
 public class Scanner extends AppCompatActivity {
     private CodeScanner codeScanner;
     private CodeScannerView scannerView;
-    private TextView resultData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
         scannerView = findViewById(R.id.scannerView);
+
         codeScanner = new CodeScanner(this, scannerView);
         //decoding scanned qr code
         codeScanner.setDecodeCallback(new DecodeCallback() {
@@ -40,9 +40,7 @@ public class Scanner extends AppCompatActivity {
                     @Override
                     public void run() {
                         Intent i = new Intent(getApplicationContext(), product.class);
-                        resultData.setText(result.getText());
-                        String positionStr = resultData.getText().toString();
-                        i.putExtra("EXTRA_SESSION_ID", positionStr);
+                        i.putExtra("EXTRA_SESSION_ID", result.getText());
                         startActivity(i);
                     }
                 });
