@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,9 +21,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 public class Cart extends AppCompatActivity {
@@ -33,9 +34,11 @@ public class Cart extends AppCompatActivity {
     private FirebaseAuth fAuth;
     private CartAdapter adapter;
     private TextView total;
-    private Button checkout, applyCouponBtn;
+    private Button checkout, applyCouponBtn, clearSale;
     private EditText coupon;
-    private boolean example = false;
+    private String finalValueString;
+    private int size;
+    private boolean couponUsed = false;
     private double finalValue = 0;
 
     @Override
@@ -48,6 +51,7 @@ public class Cart extends AppCompatActivity {
         applyCouponBtn = findViewById(R.id.applyCoupon);
         coupon = findViewById(R.id.couponValue);
         total = findViewById(R.id.totalAmountTxt);
+        clearSale = findViewById(R.id.clearSale);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
@@ -69,22 +73,39 @@ public class Cart extends AppCompatActivity {
         applyCoupon();
         totalCost();
         openCheckout();
+        clearCart();
     }
 
-    private void totalCost(){
+    private void clearCart() {
+        clearSale.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userdbref.setValue(null);
+            }
+        });
+    }
+
+    public void totalCost() {
         userdbref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //for loop that looks at each object on the path provided (userdbref)
                 for (DataSnapshot ds : snapshot.getChildren()) {
+                    size+= ds.getChildrenCount();
                     Information info = ds.getValue(Information.class);
                     //adding the individual prices together to calculate the total
                     finalValue = finalValue + info.getProductPrice();
                     //setting the total to the textview
                     DecimalFormat df = new DecimalFormat("##.##");
-                    String finalValueString = df.format(finalValue);
-                    total.setText("€"+finalValueString);
+                    finalValueString = df.format(finalValue);
                 }
+                if (finalValueString == null){
+                    total.setText("€0.0");
+                }else {
+                    total.setText("€" + finalValueString);
+                }
+                // used to ensure that an item is in the cart before allowing a coupon to be used
+                size = size/5;
             }
 
             @Override
@@ -94,10 +115,7 @@ public class Cart extends AppCompatActivity {
         });
     }
 
-    private void updateTotal(){
-        total.getText();
-    }
-    private void applyCoupon(){
+    private void applyCoupon() {
         Context context = getApplicationContext();
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("Coupon").child("Coupons");
         applyCouponBtn.setOnClickListener(new View.OnClickListener() {
@@ -113,21 +131,21 @@ public class Cart extends AppCompatActivity {
                     db.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            for (DataSnapshot ds : snapshot.getChildren()){
+                            for (DataSnapshot ds : snapshot.getChildren()) {
                                 Coupon coupon = ds.getValue(Coupon.class);
-                                //if the users entered value matches a coupon on the database and the employee hasn't already used a coupon
-                                if (coupon.getCode().equals(input) && example == false){
+                                //if the users entered value matches a coupon on the database and the employee hasn't already used a coupon and there is an item in the cart
+                                if (coupon.getCode().equals(input) && couponUsed == false && size > 0) {
                                     // dividing the total basket cost by 100 and multiplying it by the discount of the code to get the amount to take away
-                                    double percentage = finalValue/100 * coupon.getValue();
+                                    double percentage = finalValue / 100 * coupon.getValue();
                                     // taking the amount away from the total cost and updating the view
                                     finalValue = finalValue - percentage;
                                     DecimalFormat df = new DecimalFormat("##.##");
                                     String finalValueString = df.format(finalValue);
                                     // letting the user know the coupon was successfully applied
                                     Toast.makeText(context, "Coupon applied!", Toast.LENGTH_SHORT).show();
-                                    total.setText(finalValueString);
-                                    // if a coupon is used we set the used coupon branch to true to only allow one coupon used per cart
-                                    example = true;
+                                    total.setText("€"+finalValueString);
+                                    // if a coupon is used we
+                                    couponUsed = true;
                                     break;
                                 } else {
                                     Toast.makeText(context, "Coupon doesn't exist!", Toast.LENGTH_SHORT).show();
@@ -145,18 +163,36 @@ public class Cart extends AppCompatActivity {
         });
     }
 
-    private void openCheckout(){
+    private void openCheckout() {
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), checkout.class);
-                String pass = finalValue + "";
-                intent.putExtra("EXTRA_SESSION_ID", pass);
-                intent.putExtra("coupon", example);
-                startActivity(intent);
+                if (finalValue > 1){
+                    String pass = finalValue + "";
+                    intent.putExtra("EXTRA_SESSION_ID", pass);
+                    intent.putExtra("coupon", couponUsed);
+                    startActivity(intent);
+                } else {
+                    Context context = getApplicationContext();
+                    Toast.makeText(context, "Please add an item before trying to checkout!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
+
+    public void deleteItem(String position, double productPrice) {
+        fAuth = FirebaseAuth.getInstance();
+        String authUid = fAuth.getUid();
+        FirebaseDatabase.getInstance().getReference("User")
+                .child(authUid)
+                .child("cart")
+                .child(position)
+                .removeValue();
+        userdbref = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("cart");
+        //totalCost();
+    }
+
 
     @Override
     protected void onStart() {

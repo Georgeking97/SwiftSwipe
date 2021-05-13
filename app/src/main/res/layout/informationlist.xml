@@ -15,7 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:background="#949ca4"
-        android:id="@+id/layout"
+        android:id="@+id/layout2"
         android:layout_margin="2dp"
         android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="@+id/ProductPrice"
@@ -32,7 +32,7 @@
             android:textStyle="bold"
             android:textColor="#ff9999"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/layout"
+            app:layout_constraintBottom_toBottomOf="@+id/layout2"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
 

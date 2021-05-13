@@ -26,7 +26,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cartInfo"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -71,7 +71,7 @@
             android:id="@+id/applyCoupon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="32dp"
             android:background="@drawable/header_background"
             android:backgroundTint="#272928"
             android:text="Apply"
@@ -79,6 +79,19 @@
             app:layout_constraintBottom_toBottomOf="@+id/couponValue"
             app:layout_constraintStart_toEndOf="@+id/couponValue"
             app:layout_constraintTop_toTopOf="@+id/couponValue" />
+
+        <Button
+            android:id="@+id/clearSale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/header_background"
+            android:backgroundTint="#272928"
+            android:text="Clear"
+            android:textColor="#FFFFFF"
+            app:layout_constraintStart_toEndOf="@+id/couponValue"
+            app:layout_constraintTop_toBottomOf="@+id/applyCoupon" />
 
         <EditText
             android:id="@+id/couponValue"
