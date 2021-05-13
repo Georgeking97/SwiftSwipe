@@ -167,8 +167,8 @@ public class Cart extends AppCompatActivity {
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), checkout.class);
                 if (finalValue > 1){
+                    Intent intent = new Intent(getApplicationContext(), checkout.class);
                     String pass = finalValue + "";
                     intent.putExtra("EXTRA_SESSION_ID", pass);
                     intent.putExtra("coupon", couponUsed);
@@ -180,19 +180,6 @@ public class Cart extends AppCompatActivity {
             }
         });
     }
-
-    public void deleteItem(String position, double productPrice) {
-        fAuth = FirebaseAuth.getInstance();
-        String authUid = fAuth.getUid();
-        FirebaseDatabase.getInstance().getReference("User")
-                .child(authUid)
-                .child("cart")
-                .child(position)
-                .removeValue();
-        userdbref = FirebaseDatabase.getInstance().getReference("User").child(authUid).child("cart");
-        //totalCost();
-    }
-
 
     @Override
     protected void onStart() {

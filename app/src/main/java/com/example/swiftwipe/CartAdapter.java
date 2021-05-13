@@ -1,7 +1,6 @@
 package com.example.swiftwipe;
 
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class CartAdapter extends FirebaseRecyclerAdapter<Information, CartAdapter.MyViewHolder> {
-
+    private FirebaseAuth fAuth;
     public CartAdapter(@NonNull FirebaseRecyclerOptions<Information> options) {
         super(options);
     }
@@ -33,8 +34,13 @@ public class CartAdapter extends FirebaseRecyclerAdapter<Information, CartAdapte
         holder.deleteBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Cart cart = new Cart();
-                cart.deleteItem(model.getProductid(), model.getProductPrice());
+                fAuth = FirebaseAuth.getInstance();
+                String authUid = fAuth.getUid();
+                FirebaseDatabase.getInstance().getReference("User")
+                        .child(authUid)
+                        .child("cart")
+                        .child(model.getProductid())
+                        .removeValue();
             }
         });
     }
